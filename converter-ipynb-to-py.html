@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>IPYNB → PY Converter – tool-convert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-mark"></div>
+                <span class="nav-logo-text">tool-convert</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#tools" class="nav-link active">Converters</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="page-header">
+            <div class="page-eyebrow">IPYNB → PY</div>
+            <h1 class="page-title">Convert Jupyter notebooks to Python scripts.</h1>
+            <p class="page-subtitle">
+                Paste the raw <code>.ipynb</code> JSON content on the left and
+                get a cleaned Python script on the right. Runs entirely in your browser.
+            </p>
+        </section>
+
+        <section class="converter-layout">
+            <!-- INPUT -->
+            <div>
+                <label for="ipynb-input" class="field-label">
+                    1. Paste your IPYNB JSON
+                </label>
+                <textarea
+                    id="ipynb-input"
+                    class="textarea"
+                    placeholder='Paste the full content of your .ipynb file here...'
+                ></textarea>
+                <p class="helper-text">
+                    You can open the <code>.ipynb</code> file in a text editor (VS Code, etc.)
+                    and copy all its content.
+                </p>
+
+                <div class="converter-actions">
+                    <button id="convert-btn" class="btn btn-primary">
+                        Convert to PY
+                    </button>
+                    <button id="clear-btn" class="btn">
+                        Clear
+                    </button>
+                    <span class="badge-soft">
+                        Works offline · No upload
+                    </span>
+                </div>
+            </div>
+
+            <!-- OUTPUT -->
+            <div>
+                <div class="output-box">
+                    <div class="output-header">
+                        <div class="output-title">2. Your Python code</div>
+                        <button id="copy-btn" class="btn" style="font-size: 12px; padding: 6px 10px;">
+                            Copy
+                        </button>
+                    </div>
+                    <textarea
+                        id="py-output"
+                        class="textarea"
+                        style="min-height: 260px; background: #ffffff;"
+                        placeholder="Converted code will appear here..."
+                        readonly
+                    ></textarea>
+                    <p id="status-text" class="helper-text">
+                        Waiting for input…
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span>tool-convert · IPYNB → PY converter.</span>
+        </footer>
+    </main>
+
+    <!-- Basit IPYNB → PY dönüştürücü JS -->
+    <script>
+        function ipynbToPy(ipynbText) {
+            let data;
+            try {
+                data = JSON.parse(ipynbText);
+            } catch (e) {
+                throw new Error("Geçerli bir JSON değil. .ipynb içeriğini tam yapıştırdığından emin ol.");
+            }
+
+            if (!data.cells || !Array.isArray(data.cells)) {
+                throw new Error("Bu dosyada 'cells' alanı yok. Geçerli bir .ipynb dosyası olmayabilir.");
+            }
+
+            const lines = [];
+
+            data.cells.forEach((cell) => {
+                const cellType = cell.cell_type || "";
+
+                if (cellType === "markdown") {
+                    const src = cell.source || [];
+                    lines.push("# %% [markdown]");
+                    src.forEach((line) => {
+                        const clean = line.replace(/\r?\n$/, "");
+                        lines.push("# " + clean);
+                    });
+                    lines.push("");
+                } else if (cellType === "code") {
+                    const src = cell.source || [];
+                    lines.push("# %%");
+                    src.forEach((line) => {
+                        const clean = line.replace(/\r?\n$/, "");
+                        lines.push(clean);
+                    });
+                    lines.push("");
+                }
+            });
+
+            return lines.join("\n");
+        }
+
+        const inputEl = document.getElementById("ipynb-input");
+        const outputEl = document.getElementById("py-output");
+        const convertBtn = document.getElementById("convert-btn");
+        const clearBtn = document.getElementById("clear-btn");
+        const copyBtn = document.getElementById("copy-btn");
+        const statusText = document.getElementById("status-text");
+
+        convertBtn.addEventListener("click", () => {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                statusText.textContent = "Önce sol tarafa bir .ipynb JSON içeriği yapıştır.";
+                return;
+            }
+
+            try {
+                const py = ipynbToPy(raw);
+                outputEl.value = py || "# (Bu notebookta kod hücresi bulunamadı.)";
+                statusText.textContent = "Dönüşüm tamamlandı ✔";
+            } catch (err) {
+                outputEl.value = "";
+                statusText.textContent = "Hata: " + err.message;
+            }
+        });
+
+        clearBtn.addEventListener("click", () => {
+            inputEl.value = "";
+            outputEl.value = "";
+            statusText.textContent = "Temizlendi. Yeni bir notebook yapıştırabilirsin.";
+        });
+
+        copyBtn.addEventListener("click", async () => {
+            const text = outputEl.value;
+            if (!text.trim()) {
+                statusText.textContent = "Kopyalanacak bir içerik yok.";
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(text);
+                statusText.textContent = "Panoya kopyalandı ✔";
+            } catch (e) {
+                statusText.textContent = "Panoya kopyalanamadı. Metni manuel kopyalayabilirsin.";
+            }
+        });
+    </script>
+</body>
+</html>
