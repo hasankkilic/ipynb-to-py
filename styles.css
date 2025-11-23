@@ -291,21 +291,6 @@ html, body {
     color: #6b7280;
 }
 
-/* PYTHON ÇIKTI ÖNİZLEME PENCERESİNİ SABİTLEME */
-.output-preview {
-    max-height: 420px;     /* kutu sabit yükseklikte kalsın */
-    min-height: 420px;
-    overflow-y: auto;      /* dikey scroll aktif */
-    overflow-x: auto;      /* yatay scroll varsa kalsın */
-    white-space: pre;      /* kod formatı bozulmasın */
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-    background: #020617;
-    color: #e5e7eb;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #1e293b;
-}
-
 /* İLETİŞİM SAYFASI */
 
 .contact-card {
@@ -334,4 +319,19 @@ html, body {
     font-size: 12px;
     color: #9ca3af;
     text-align: center;
+}
+
+/* PYTHON ÇIKTI ÖNİZLEME PENCERESİNİ SABİTLEME */
+.output-preview {
+    max-height: 420px;     /* kutu sabit yükseklikte kalsın */
+    min-height: 420px;
+    overflow-y: auto;      /* dikey scroll aktif */
+    overflow-x: auto;      /* yatay scroll varsa kalsın */
+    white-space: pre;      /* kod formatı bozulmasın */
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    background: #020617;
+    color: #e5e7eb;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
 }
