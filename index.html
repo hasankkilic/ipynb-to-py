@@ -4,11 +4,7 @@
     <meta charset="UTF-8" />
     <title>tool-convert.com – Simple in-browser converters</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Harici CSS bağlantısı -->
     <link rel="stylesheet" href="style.css" />
-
-    <!-- Favicon (isteğe bağlı) -->
     <link rel="icon" type="image/png" href="favicon.png" />
 </head>
 
@@ -32,12 +28,11 @@
         </nav>
     </header>
 
-
     <!-- MAIN TOOL -->
     <main id="ipynb-to-py">
         <div class="layout">
 
-            <!-- LEFT -->
+            <!-- LEFT: UPLOADER -->
             <section class="card">
                 <div class="crumb">
                     <span class="crumb-dot"></span>
@@ -45,7 +40,6 @@
                 </div>
 
                 <h1>IPYNB to Python Converter</h1>
-
                 <p class="subtitle">
                     Drag & drop a <strong>.ipynb</strong> notebook or click the area below.
                     We’ll extract the code cells and generate a clean <strong>.py</strong> file.
@@ -65,38 +59,39 @@
                         Choose notebook <small>(.ipynb)</small>
                     </button>
 
-                    <input type="file" id="file-input" accept=".ipynb,application/json" hidden/>
+                    <input type="file" id="file-input" accept=".ipynb,application/json" style="display:none" />
 
                     <div class="hint-row">
-                        Only Jupyter Notebook files (.ipynb) supported.  
-                        Runs locally in your browser.
+                        Only Jupyter Notebook files (<strong>.ipynb</strong>) are supported. <br>
+                        Works locally in the browser · Best for Jupyter / Colab notebooks.
                     </div>
                 </div>
             </section>
 
-            <!-- RIGHT PREVIEW -->
+            <!-- RIGHT: PREVIEW -->
             <section class="card preview-card">
-
                 <div class="preview-header">
                     <div class="preview-title">Python output preview</div>
-                    <div class="preview-subtitle">Preview of generated Python file.</div>
+                    <div class="preview-subtitle">Preview of the generated Python file.</div>
                 </div>
 
                 <div class="preview-box">
-                    <div id="output-preview" class="preview-scroll">
+                    <div class="preview-scroll" id="output-preview">
 # Converted from Jupyter Notebook
 # tool-convert.com – IPYNB → PY
 
 # Cell 1
 # ----------------------------------------
 # Your converted Python code will appear here
-# after you drop a .ipynb file.
+# after you drop a .ipynb file on the left.
                     </div>
 
                     <div class="preview-meta">
                         <span id="file-meta">No file loaded</span>
-                        <a id="download-link" class="download-link" href="#" style="pointer-events:none; opacity:0.4;">
-                            Download .py file
+                        <a id="download-link" class="download-link"
+                           href="#" download="notebook.py"
+                           style="pointer-events:none; opacity:0.4;">
+                           Download .py file
                         </a>
                     </div>
                 </div>
@@ -106,11 +101,12 @@
         </div>
     </main>
 
-
-    <!-- TOOLS SECTION -->
+    <!-- CONVERTERS SECTION -->
     <section id="converters">
         <h2 class="section-title">Converters</h2>
-        <p class="section-subtitle">Use our browser-based conversion tools.</p>
+        <p class="section-subtitle">
+            A small toolbox of browser-based utilities. Only the first converter is active.
+        </p>
 
         <div class="tools-row">
 
@@ -120,11 +116,13 @@
                         <div class="tool-name">IPYNB → PY Converter</div>
                         <span class="tool-badge-active">Active</span>
                     </div>
-                    <p class="tool-desc">Extract Python code from Jupyter notebooks.</p>
+                    <p class="tool-desc">
+                        Extracts code cells and builds a clean Python file.
+                    </p>
                 </div>
 
                 <div class="tool-footer">
-                    <span>Runs in browser</span>
+                    <span>Runs fully in your browser</span>
                     <button class="tool-open-btn" onclick="scrollToTool()">Open tool</button>
                 </div>
             </div>
@@ -135,10 +133,10 @@
                         <div class="tool-name">PY → IPYNB</div>
                         <span class="tool-badge-soon">Soon</span>
                     </div>
-                    <p class="tool-desc">Convert Python back to notebook.</p>
+                    <p class="tool-desc">Convert Python script into notebook.</p>
                 </div>
                 <div class="tool-footer">
-                    <span>Coming soon</span>
+                    <span>Planned feature</span>
                     <button class="tool-open-btn" disabled>Open tool</button>
                 </div>
             </div>
@@ -149,10 +147,10 @@
                         <div class="tool-name">JSON Beautifier</div>
                         <span class="tool-badge-soon">Soon</span>
                     </div>
-                    <p class="tool-desc">Format JSON properly.</p>
+                    <p class="tool-desc">Pretty JSON with validation.</p>
                 </div>
                 <div class="tool-footer">
-                    <span>Coming soon</span>
+                    <span>Planned feature</span>
                     <button class="tool-open-btn" disabled>Open tool</button>
                 </div>
             </div>
@@ -160,23 +158,20 @@
         </div>
     </section>
 
-
-    <!-- CONTACT -->
+    <!-- CONTACT SECTION -->
     <section id="contact">
         <h2 class="section-title">Contact</h2>
-        <p class="section-subtitle">For questions or suggestions:</p>
-        <p style="font-size:1rem; margin-top:10px;">
-            <strong>Email:</strong> <a href="mailto:hhgkilic@gmail.com">hhgkilic@gmail.com</a>
-        </p>
+        <p class="section-subtitle">For feedback or bug reports:</p>
+        <p><strong>Email:</strong> <a href="mailto:hhgkilic@gmail.com">hhgkilic@gmail.com</a></p>
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer">tool-convert.com — Simple in-browser converters</footer>
+    <footer class="footer">
+        tool-convert.com · Simple in-browser converters
+    </footer>
 
 </div>
 
-<!-- JS -->
 <script src="script.js"></script>
-
 </body>
 </html>
