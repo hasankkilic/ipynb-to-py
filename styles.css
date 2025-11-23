@@ -13,28 +13,33 @@ html, body {
     color: #1f2933;
 }
 
-/* NAVBAR */
+/* NAVBAR (DÜZENLENMİŞ) */
 
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 
-    /* YENİ ARKA PLAN */
+    /* ✔️ Yeni arka plan deseni */
     background: repeating-linear-gradient(
         135deg,
         #ffffff 0px,
-        #f7f8fc 8px,
+        #f3f4f6 8px,
         #ffffff 16px
     );
-    
-    padding: 16px 10px;
-    border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-}
 
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e5e7eb;
+
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 .nav-inner {
     max-width: 960px;
@@ -286,6 +291,23 @@ html, body {
     gap: 10px;
 }
 
+/* Burası preview scroll düzeltmesi ekli */
+
+.output-preview,
+.preview-scroll {
+    max-height: 420px;
+    min-height: 420px;
+    overflow-y: auto;
+    overflow-x: auto;
+    white-space: pre;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    background: #020617;
+    color: #e5e7eb;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+}
+
 .output-header {
     display: flex;
     justify-content: space-between;
@@ -332,19 +354,3 @@ html, body {
     color: #9ca3af;
     text-align: center;
 }
-
-/* PYTHON ÇIKTI ÖNİZLEME PENCERESİNİ SABİTLEME */
-.output-preview {
-    max-height: 420px;     /* kutu sabit yükseklikte kalsın */
-    min-height: 420px;
-    overflow-y: auto;      /* dikey scroll aktif */
-    overflow-x: auto;      /* yatay scroll varsa kalsın */
-    white-space: pre;      /* kod formatı bozulmasın */
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-    background: #020617;
-    color: #e5e7eb;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #1e293b;
-}
-
