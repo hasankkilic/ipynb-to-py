@@ -1,506 +1,617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>tool-convert.com – Simple Dev Tools</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-        name="description"
-        content="Simple browser-based tools: IPYNB to PY, JSON beautifier, CSV to JSON."
-    />
+    <meta charset="UTF-8">
+    <title>IPYNB → PY Converter | tool-convert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --border: #e2e2e7;
+            --accent: #2563eb;
+            --accent-soft: rgba(37, 99, 235, 0.06);
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --error: #dc2626;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+        }
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-                sans-serif;
-            background: #f5f5f7;
-            color: #111827;
+            margin: 0;
             min-height: 100vh;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top left, #e5edff 0, #f5f5f7 50%, #f9fafb 100%);
+            color: var(--text-main);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
         }
 
         header {
-            padding: 16px 24px;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
         }
 
-        .logo {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 15px;
+        }
+
+        .brand-text {
+            font-weight: 600;
+            font-size: 17px;
+            letter-spacing: 0.02em;
         }
 
         .tagline {
             font-size: 13px;
-            color: #6b7280;
+            color: var(--text-muted);
         }
 
         main {
-            flex: 1;
-            display: flex;
-            max-width: 1200px;
-            width: 100%;
-            margin: 16px auto;
-            gap: 16px;
-            padding: 0 16px;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            height: fit-content;
-        }
-
-        .sidebar-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .tool-button {
-            width: 100%;
-            text-align: left;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tool-button span.badge {
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 999px;
-            background: #eef2ff;
-            color: #4f46e5;
-        }
-
-        .tool-button.active {
-            background: #eef2ff;
-            color: #111827;
-            font-weight: 600;
-        }
-
-        .tool-button:not(.active):hover {
-            background: #f3f4f6;
-        }
-
-        .content {
-            flex: 1;
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .tool-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .tool-description {
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        .field-label {
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-                "Liberation Mono", "Courier New", monospace;
-            font-size: 13px;
-            resize: vertical;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 1px #4f46e522;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 8px;
-            margin: 8px 0;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #4338ca;
-        }
-
-        .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-        }
-
-        .btn-secondary:hover {
-            background: #e5e7eb;
-        }
-
-        .note {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        footer {
-            padding: 12px 16px;
-            text-align: center;
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .hidden {
-            display: none;
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+            gap: 24px;
         }
 
         @media (max-width: 900px) {
             main {
-                flex-direction: column;
+                grid-template-columns: minmax(0, 1fr);
             }
-            .sidebar {
-                width: 100%;
-            }
+        }
+
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 22px 22px 20px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border);
+        }
+
+        .hero-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .pill-row {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            color: #4b5563;
+        }
+
+        .pill--accent {
+            border-color: rgba(37, 99, 235, 0.2);
+            background: var(--accent-soft);
+            color: #1d4ed8;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 18px 18px 16px;
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .tool-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .tool-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #ecfeff;
+            border: 1px solid #a5f3fc;
+            color: #0369a1;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .file-drop {
+            position: relative;
+            border-radius: var(--radius-md);
+            border: 1px dashed #d1d5db;
+            background: #f9fafb;
+            padding: 16px 14px;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease, transform 0.05s ease;
+        }
+
+        .file-drop:hover {
+            border-color: var(--accent);
+            background: #f3f4ff;
+            transform: translateY(-1px);
+        }
+
+        .file-drop input {
+            display: none;
+        }
+
+        .file-drop-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .file-drop-text {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .file-drop-text strong {
+            color: var(--text-main);
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease, border-color 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-ghost {
+            background: #f9fafb;
+            color: #111827;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-ghost:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+        }
+
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: 12px;
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 120px;
+            border-radius: var(--radius-md);
+            border: 1px solid #e5e7eb;
+            padding: 10px 11px;
+            font-size: 13px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            resize: vertical;
+            outline: none;
+            background: #f9fafb;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.23);
+            background: #ffffff;
+        }
+
+        .input-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .status {
+            font-size: 12px;
+            margin-top: 6px;
+            color: var(--text-muted);
+        }
+
+        .status--error {
+            color: var(--error);
+        }
+
+        .status--success {
+            color: #15803d;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .output-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .meta-card {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 18px;
+            padding: 16px 16px 14px;
+            border: 1px solid rgba(209, 213, 219, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .meta-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .meta-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meta-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        .stat-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .stat-pill {
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            font-size: 11px;
+            color: #4b5563;
+        }
+
+        footer {
+            margin-top: 18px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<header>
-    <div>
-        <div class="logo">tool-convert.com</div>
-        <div class="tagline">Lightweight browser tools for developers</div>
-    </div>
-</header>
+<div class="page">
+    <header>
+        <div class="brand">
+            <div class="brand-logo">TC</div>
+            <div>
+                <div class="brand-text">tool-convert</div>
+                <div class="tagline">Lightweight browser tools for developers</div>
+            </div>
+        </div>
+    </header>
 
-<main>
-    <aside class="sidebar">
-        <div class="sidebar-title">Available tools</div>
-
-        <button class="tool-button active" data-tool="ipynb-to-py">
-            <span>IPYNB → PY</span>
-            <span class="badge">Popular</span>
-        </button>
-
-        <button class="tool-button" data-tool="json-beautify">
-            <span>JSON Beautifier</span>
-        </button>
-
-        <button class="tool-button" data-tool="csv-to-json">
-            <span>CSV → JSON</span>
-        </button>
-
-        <!-- Diğerlerini sonradan ekleyebiliriz -->
-        <!--
-        <button class="tool-button" disabled>
-            <span>PY → IPYNB</span>
-            <span class="badge">Soon</span>
-        </button>
-        -->
-    </aside>
-
-    <section class="content">
-        <!-- IPYNB TO PY -->
-        <div id="tool-ipynb-to-py" class="tool-panel">
-            <div class="tool-title">IPYNB → PY Converter</div>
-            <p class="tool-description">
-                Upload a Jupyter Notebook (.ipynb) or paste its JSON content. We extract
-                all code cells and generate a clean .py script.
-            </p>
-
-            <div style="margin-top: 8px;">
-                <label class="field-label">Upload .ipynb file</label><br />
-                <input type="file" id="ipynbFileInput" accept=".ipynb" />
+    <main>
+        <!-- LEFT SIDE: MAIN TOOL -->
+        <section class="hero-card">
+            <div class="hero-header">
+                <h1 class="hero-title">IPYNB → PY Converter</h1>
+                <p class="hero-subtitle">
+                    Convert Jupyter notebooks to clean Python scripts — directly in your browser.
+                    No upload, everything stays on your device.
+                </p>
             </div>
 
-            <div style="margin-top: 8px;">
-                <label class="field-label">Or paste notebook JSON</label>
-                <textarea id="ipynbInput" placeholder='{"cells": [...]} JSON'></textarea>
+            <div class="pill-row">
+                <span class="pill pill--accent">Runs in your browser</span>
+                <span class="pill">No login</span>
+                <span class="pill">No file size tracking</span>
             </div>
 
-            <div class="button-row">
-                <button class="btn btn-primary" id="convertIpynbBtn">
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div>
+                        <div class="tool-title">Notebook input</div>
+                        <div class="tool-subtitle">Upload a <code>.ipynb</code> file or paste its JSON.</div>
+                    </div>
+                    <span class="badge">IPYNB → PY</span>
+                </div>
+
+                <div class="input-section">
+                    <label for="file-input">1. Upload your notebook</label>
+                    <label class="file-drop">
+                        <input type="file" id="file-input" accept=".ipynb"/>
+                        <div class="file-drop-main">
+                            <div class="file-drop-text">
+                                <strong>Click to choose</strong> or drag a <code>.ipynb</code> file here
+                            </div>
+                            <button type="button" class="btn btn-ghost btn-sm">Browse file</button>
+                        </div>
+                    </label>
+                    <div class="input-hint">
+                        <span id="file-name">No file selected yet.</span>
+                        <span>Max few MB is ideal.</span>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <label for="ipynb-input">2. Or paste raw <code>.ipynb</code> JSON</label>
+                    <textarea id="ipynb-input" class="textarea" placeholder='Paste the JSON content of your .ipynb file here if you prefer...'></textarea>
+                    <div class="input-hint">
+                        <span>If both file & text are filled, file content is used.</span>
+                        <span>We never send data to a server.</span>
+                    </div>
+                </div>
+
+                <button id="convert-btn" class="btn btn-primary" type="button">
                     Convert to .py
                 </button>
-                <button class="btn btn-secondary" id="downloadPyBtn" disabled>
-                    Download .py file
-                </button>
+
+                <div id="status" class="status"></div>
+
+                <div class="output-header">
+                    <div class="output-label">Python output</div>
+                    <button id="copy-btn" class="btn btn-ghost btn-sm" type="button">
+                        Copy .py
+                    </button>
+                </div>
+
+                <textarea id="py-output" class="textarea" placeholder="# Converted Python code will appear here..." readonly></textarea>
             </div>
+        </section>
 
-            <label class="field-label">Output Python code</label>
-            <textarea id="pyOutput" placeholder="# Result will appear here..." readonly></textarea>
+        <!-- RIGHT SIDE: INFO / META -->
+        <aside class="meta-card">
+            <div class="meta-title">How it works</div>
+            <ul class="meta-list">
+                <li>
+                    <span class="meta-dot"></span>
+                    <span>We parse the <code>.ipynb</code> JSON inside your browser.</span>
+                </li>
+                <li>
+                    <span class="meta-dot"></span>
+                    <span>All <strong>code cells</strong> are extracted and stitched into a single <code>.py</code> script.</span>
+                </li>
+                <li>
+                    <span class="meta-dot"></span>
+                    <span>No backend, no upload, no tracking — just static HTML + JS.</span>
+                </li>
+            </ul>
 
-            <p class="note">
-                Works entirely in your browser. No files are uploaded to any server.
-            </p>
-        </div>
+            <div class="meta-title" style="margin-top: 6px; font-size: 14px;">Good to know</div>
+            <ul class="meta-list">
+                <li>
+                    <span class="meta-dot" style="background:#f97316;"></span>
+                    <span>Markdown cells are ignored by default.</span>
+                </li>
+                <li>
+                    <span class="meta-dot" style="background:#3b82f6;"></span>
+                    <span>Each cell is separated by a comment like <code># In [cell]</code>.</span>
+                </li>
+            </ul>
 
-        <!-- JSON BEAUTIFIER -->
-        <div id="tool-json-beautify" class="tool-panel hidden">
-            <div class="tool-title">JSON Beautifier</div>
-            <p class="tool-description">
-                Paste your JSON and format it with indentation. Great for logs and API
-                responses.
-            </p>
-
-            <label class="field-label">Input JSON</label>
-            <textarea id="jsonInput" placeholder='{"name":"Hasan","age":20}'></textarea>
-
-            <div class="button-row">
-                <button class="btn btn-primary" id="beautifyJsonBtn">
-                    Beautify
-                </button>
-                <button class="btn btn-secondary" id="minifyJsonBtn">
-                    Minify
-                </button>
+            <div class="stat-row">
+                <span class="stat-pill">Static site (GitHub Pages)</span>
+                <span class="stat-pill">Client-side only</span>
+                <span class="stat-pill">Built for notebook cleanup</span>
             </div>
+        </aside>
+    </main>
 
-            <label class="field-label">Output</label>
-            <textarea id="jsonOutput" placeholder="Formatted JSON will appear here..."></textarea>
-
-            <p class="note">
-                If JSON is invalid, you'll see an error message instead of formatted
-                output.
-            </p>
-        </div>
-
-        <!-- CSV TO JSON -->
-        <div id="tool-csv-to-json" class="tool-panel hidden">
-            <div class="tool-title">CSV → JSON</div>
-            <p class="tool-description">
-                Paste CSV data (first row as header) and convert it to JSON array.
-            </p>
-
-            <label class="field-label">Input CSV</label>
-            <textarea id="csvInput" placeholder="name,age&#10;Hasan,20&#10;Ayşe,22"></textarea>
-
-            <div class="button-row">
-                <button class="btn btn-primary" id="csvToJsonBtn">
-                    Convert to JSON
-                </button>
-            </div>
-
-            <label class="field-label">Output JSON</label>
-            <textarea id="csvJsonOutput" placeholder='[{"name":"Hasan","age":"20"}, ...]'></textarea>
-
-            <p class="note">
-                Simple CSV parser (no advanced quoting). Good for quick conversions.
-            </p>
-        </div>
-    </section>
-</main>
-
-<footer>
-    <p>tool-convert.com – simple client-side converters</p>
-</footer>
+    <footer>
+        tool-convert • IPYNB → PY converter • Static HTML + JavaScript
+    </footer>
+</div>
 
 <script>
-    // ---- TOOL SWITCHING ----
-    const toolButtons = document.querySelectorAll(".tool-button");
-    const panels = {
-        "ipynb-to-py": document.getElementById("tool-ipynb-to-py"),
-        "json-beautify": document.getElementById("tool-json-beautify"),
-        "csv-to-json": document.getElementById("tool-csv-to-json"),
-    };
+    const fileInput = document.getElementById("file-input");
+    const fileNameSpan = document.getElementById("file-name");
+    const ipynbInput = document.getElementById("ipynb-input");
+    const convertBtn = document.getElementById("convert-btn");
+    const copyBtn = document.getElementById("copy-btn");
+    const pyOutput = document.getElementById("py-output");
+    const statusEl = document.getElementById("status");
 
-    toolButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            if (btn.disabled) return;
-            const tool = btn.getAttribute("data-tool");
+    let fileContentCache = "";
 
-            toolButtons.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
+    fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            fileNameSpan.textContent = "No file selected yet.";
+            fileContentCache = "";
+            return;
+        }
 
-            Object.values(panels).forEach((p) => p.classList.add("hidden"));
-            const panelId =
-                tool === "ipynb-to-py"
-                    ? "tool-ipynb-to-py"
-                    : tool === "json-beautify"
-                    ? "tool-json-beautify"
-                    : "tool-csv-to-json";
-            panels[tool].classList.remove("hidden");
-        });
-    });
+        fileNameSpan.textContent = file.name;
 
-    // ---- IPYNB → PY LOGIC ----
-    const ipynbFileInput = document.getElementById("ipynbFileInput");
-    const ipynbInput = document.getElementById("ipynbInput");
-    const convertIpynbBtn = document.getElementById("convertIpynbBtn");
-    const downloadPyBtn = document.getElementById("downloadPyBtn");
-    const pyOutput = document.getElementById("pyOutput");
-
-    let lastPyCode = "";
-
-    ipynbFileInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
         const reader = new FileReader();
-        reader.onload = (event) => {
-            ipynbInput.value = event.target.result;
+        reader.onload = () => {
+            fileContentCache = reader.result;
+            statusMessage("File loaded. Click “Convert to .py”.", "success");
+        };
+        reader.onerror = () => {
+            statusMessage("Error reading file. Please try again.", "error");
         };
         reader.readAsText(file);
     });
 
-    convertIpynbBtn.addEventListener("click", () => {
-        const raw = ipynbInput.value.trim();
-        if (!raw) {
-            alert("Lütfen .ipynb içeriğini yapıştırın veya dosya yükleyin.");
+    convertBtn.addEventListener("click", () => {
+        statusMessage("", "neutral");
+        pyOutput.value = "";
+
+        const rawJson = fileContentCache || ipynbInput.value.trim();
+
+        if (!rawJson) {
+            statusMessage("Please select a .ipynb file or paste its JSON first.", "error");
             return;
         }
 
         try {
-            const nb = JSON.parse(raw);
-            const cells = nb.cells || [];
-            let result = "";
-
-            cells.forEach((cell) => {
-                if (cell.cell_type === "code") {
-                    const src = Array.isArray(cell.source)
-                        ? cell.source.join("")
-                        : cell.source || "";
-                    if (src.trim().length > 0) {
-                        result += src;
-                        if (!src.endsWith("\n")) {
-                            result += "\n";
-                        }
-                        result += "\n";
-                    }
-                }
-            });
-
-            if (!result.trim()) {
-                result = "# No code cells found in notebook.";
-            }
-
-            pyOutput.value = result;
-            lastPyCode = result;
-            downloadPyBtn.disabled = false;
+            const pyCode = convertNotebookToPython(rawJson);
+            pyOutput.value = pyCode || "# No code cells found in this notebook.";
+            statusMessage("Conversion successful.", "success");
         } catch (err) {
             console.error(err);
-            alert("Geçersiz JSON / IPYNB formatı. Lütfen dosyayı kontrol edin.");
-            downloadPyBtn.disabled = true;
+            statusMessage("Conversion failed: " + err.message, "error");
         }
     });
 
-    downloadPyBtn.addEventListener("click", () => {
-        if (!lastPyCode) return;
-        const blob = new Blob([lastPyCode], { type: "text/x-python" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "notebook_converted.py";
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-
-    // ---- JSON BEAUTIFIER LOGIC ----
-    const jsonInput = document.getElementById("jsonInput");
-    const jsonOutput = document.getElementById("jsonOutput");
-    const beautifyJsonBtn = document.getElementById("beautifyJsonBtn");
-    const minifyJsonBtn = document.getElementById("minifyJsonBtn");
-
-    beautifyJsonBtn.addEventListener("click", () => {
-        const raw = jsonInput.value.trim();
-        if (!raw) {
-            alert("Lütfen JSON verisi girin.");
+    copyBtn.addEventListener("click", async () => {
+        const text = pyOutput.value;
+        if (!text.trim()) {
+            statusMessage("Nothing to copy yet.", "error");
             return;
         }
         try {
-            const obj = JSON.parse(raw);
-            jsonOutput.value = JSON.stringify(obj, null, 2);
+            await navigator.clipboard.writeText(text);
+            statusMessage("Copied to clipboard.", "success");
         } catch (err) {
-            jsonOutput.value = "Error: Invalid JSON\n" + err.message;
+            console.error(err);
+            statusMessage("Could not copy. You can still select and copy manually.", "error");
         }
     });
 
-    minifyJsonBtn.addEventListener("click", () => {
-        const raw = jsonInput.value.trim();
-        if (!raw) {
-            alert("Lütfen JSON verisi girin.");
-            return;
+    function statusMessage(msg, type) {
+        statusEl.textContent = msg || "";
+        statusEl.classList.remove("status--error", "status--success");
+        if (type === "error") {
+            statusEl.classList.add("status--error");
+        } else if (type === "success") {
+            statusEl.classList.add("status--success");
         }
+    }
+
+    function convertNotebookToPython(rawJson) {
+        let nb;
         try {
-            const obj = JSON.parse(raw);
-            jsonOutput.value = JSON.stringify(obj);
-        } catch (err) {
-            jsonOutput.value = "Error: Invalid JSON\n" + err.message;
-        }
-    });
-
-    // ---- CSV → JSON LOGIC ----
-    const csvInput = document.getElementById("csvInput");
-    const csvJsonOutput = document.getElementById("csvJsonOutput");
-    const csvToJsonBtn = document.getElementById("csvToJsonBtn");
-
-    csvToJsonBtn.addEventListener("click", () => {
-        const raw = csvInput.value.trim();
-        if (!raw) {
-            alert("Lütfen CSV verisi girin.");
-            return;
+            nb = JSON.parse(rawJson);
+        } catch (e) {
+            throw new Error("Input is not valid JSON.");
         }
 
-        const lines = raw.split(/\r?\n/).filter((line) => line.trim() !== "");
-        if (lines.length < 2) {
-            csvJsonOutput.value = "Error: En az bir header ve bir data satırı olmalı.";
-            return;
+        if (!nb.cells || !Array.isArray(nb.cells)) {
+            throw new Error("This does not look like a Jupyter notebook (.ipynb).");
         }
 
-        const headers = lines[0].split(",");
-        const rows = lines.slice(1);
-        const result = rows.map((line) => {
-            const cols = line.split(",");
-            const obj = {};
-            headers.forEach((h, i) => {
-                obj[h.trim()] = (cols[i] || "").trim();
-            });
-            return obj;
+        const lines = [];
+        lines.push("# Converted from .ipynb notebook");
+        lines.push("# Generated by tool-convert IPYNB → PY");
+        lines.push("");
+
+        nb.cells.forEach((cell, index) => {
+            if (cell.cell_type !== "code") {
+                return;
+            }
+            const src = cell.source || [];
+            const cellLines = Array.isArray(src) ? src : [String(src)];
+
+            lines.push(`# In [${index}]`);
+            lines.push(...cellLines.map(String));
+            lines.push("");
         });
 
-        csvJsonOutput.value = JSON.stringify(result, null, 2);
-    });
+        return lines.join("\n");
+    }
 </script>
 </body>
 </html>
