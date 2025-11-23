@@ -23,77 +23,87 @@
     </header>
 
     <!-- PAGE CONTENT -->
-    <main class="page">
-        <section class="page-header">
-            <div class="page-eyebrow">Developer utilities</div>
-            <h1 class="page-title">Fast, minimal, browser-only tools.</h1>
-            <p class="page-subtitle">
-                No login, no tracking. Just a few clean utilities you can keep in
-                your bookmarks. Start with the IPYNB → PY converter, more tools
-                will follow here.
+<main class="page-main">
+    <!-- Hero / Üst bölüm -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">IPYNB to Python Converter</h1>
+            <p class="hero-subtitle">
+                Jupyter Notebook dosyalarınızı (.ipynb) saniyeler içinde saf Python dosyalarına (.py) dönüştürün.
+            </p>
+        </div>
+    </section>
+
+    <!-- Kartlar (Converter listesi) -->
+    <section class="tools-section">
+        <h2 class="section-title">Converters</h2>
+        <div class="tools-grid">
+            <!-- Çalışan ana converter kartı -->
+            <article class="tool-card">
+                <h3 class="tool-title">IPYNB to Python</h3>
+                <p class="tool-description">
+                    Jupyter Notebook içindeki tüm kod hücrelerini toplayıp tek bir .py dosyası olarak indir.
+                </p>
+                <button id="open-ipynb-tool" class="tool-button">
+                    Open tool
+                </button>
+            </article>
+
+            <!-- İleride eklenecek - 1 -->
+            <article class="tool-card tool-card-soon">
+                <h3 class="tool-title">PY to IPYNB</h3>
+                <p class="tool-description">
+                    <strong>Soon</strong> – Python dosyalarınızı tekrar .ipynb formatına dönüştürme aracı.
+                </p>
+                <button class="tool-button" disabled>
+                    Soon
+                </button>
+            </article>
+
+            <!-- İleride eklenecek - 2 -->
+            <article class="tool-card tool-card-soon">
+                <h3 class="tool-title">JSON Beautifier</h3>
+                <p class="tool-description">
+                    <strong>Soon</strong> – JSON verilerinizi otomatik biçimlendirme ve güzelleştirme aracı.
+                </p>
+                <button class="tool-button" disabled>
+                    Soon
+                </button>
+            </article>
+        </div>
+    </section>
+
+    <!-- IPYNB → PY Converter aracı (Open tool ile açılacak kısım) -->
+    <section id="ipynb-converter-panel" class="converter-panel hidden">
+        <div class="converter-panel-inner">
+            <h2 class="panel-title">IPYNB to Python Converter</h2>
+            <p class="panel-description">
+                Aşağıdaki alana bir <code>.ipynb</code> dosyasını
+                <strong>sürükleyip bırakabilir</strong> veya tıklayarak seçebilirsiniz.
+                Dönüştürme işlemi tamamen tarayıcınızda gerçekleşir.
             </p>
 
-            <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="converter-ipynb-to-py.html" class="btn btn-primary">
-                    Open IPYNB → PY Converter
-                </a>
-                <a href="#tools" class="btn">Browse all converters</a>
-            </div>
-        </section>
-
-        <!-- TOOL GRID -->
-        <section id="tools">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h2 style="font-size: 20px; margin: 0; color: #111827;">
-                    Converters
-                </h2>
-                <span style="font-size: 13px; color: #6b7280;">
-                    Currently 1 active tool
-                </span>
+            <!-- Drag & Drop alanı -->
+            <div id="drop-area" class="drop-area">
+                <input
+                    type="file"
+                    id="file-input"
+                    accept=".ipynb"
+                    class="file-input"
+                />
+                <div class="drop-area-content">
+                    <p class="drop-title">Drop your .ipynb file here</p>
+                    <p class="drop-subtitle">or click to choose a file</p>
+                </div>
             </div>
 
-            <div class="tool-grid">
-                <!-- IPYNB → PY -->
-                <article class="tool-card">
-                    <span class="tool-tag">
-                        <span>Notebook</span>
-                        <span>→</span>
-                        <span>Script</span>
-                    </span>
-                    <h3 class="tool-title">IPYNB → PY Converter</h3>
-                    <p class="tool-desc">
-                        Paste your Jupyter notebook JSON and get a clean Python
-                        script. Works fully in your browser – nothing is uploaded.
-                    </p>
-                    <div class="tool-footer">
-                        <span>Safe • Offline-friendly</span>
-                        <a href="converter-ipynb-to-py.html" class="btn" style="font-size: 13px;">
-                            Open tool
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Gelecekte başka tool'lar için boş kart (şimdilik pasif) -->
-                <article class="tool-card">
-                    <span class="tool-tag">
-                        <span>Coming soon</span>
-                    </span>
-                    <h3 class="tool-title">More converters</h3>
-                    <p class="tool-desc">
-                        JSON beautifier, CSV → JSON, Markdown → HTML and more
-                        helpers will live here as you extend the platform.
-                    </p>
-                    <div class="tool-footer">
-                        <span>Planned</span>
-                        <span style="font-size: 12px; color: #9ca3af;">Not active yet</span>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <footer class="footer">
-            <span>tool-convert · Simple tools for everyday dev work.</span>
-        </footer>
-    </main>
+            <p class="panel-note">
+                Dönüşüm tamamlandığında, <strong>.py</strong> dosyası otomatik
+                olarak indirilecektir.
+            </p>
+        </div>
+    </section>
+</main>
 </body>
 </html>
+
