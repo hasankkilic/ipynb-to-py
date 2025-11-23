@@ -1,63 +1,56 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>İletişim – tool-convert</title>
+    <title>Contact – tool-convert</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-inner">
-            <div class="brand">
-                <div class="brand-logo">
-                    <span>TC</span>
-                </div>
-                <div class="brand-text">
-                    <span class="brand-text-title">tool-convert</span>
-                    <span class="brand-text-subtitle">Lightweight dev tools</span>
-                </div>
-            </div>
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-mark"></div>
+                <span class="nav-logo-text">tool-convert</span>
+            </a>
             <nav class="nav-links">
-                <a href="index.html">Ana Sayfa</a>
-                <a href="tools.html">Converters</a>
-                <a href="contact.html" class="active">İletişim</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#tools" class="nav-link">Converters</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
             </nav>
         </div>
     </header>
 
-    <main class="page-wrap">
-        <section class="hero">
-            <div class="hero-kicker">İletişim</div>
-            <h1 class="hero-title">Öneri ve geri bildirim</h1>
-            <p class="hero-subtitle">
-                Yeni tool fikirlerin, bug raporların veya iş birliği
-                isteklerin için burayı kullanabilirsin. Şimdilik form
-                sadece görsel; e-posta kısmına kendi adresini ekleyebilirsin.
+    <main class="page">
+        <section class="page-header">
+            <div class="page-eyebrow">Contact</div>
+            <h1 class="page-title">Get in touch.</h1>
+            <p class="page-subtitle">
+                If you have ideas for new tools, bug reports or collaboration
+                requests, feel free to reach out by e-mail.
             </p>
         </section>
 
-        <section class="card">
-            <form class="contact-form" onsubmit="event.preventDefault(); alert('Bu form şu an sadece demo. E-posta adresini sayfada paylaşabilirsin.');">
-                <div>
-                    <label for="name">İsim</label>
-                    <input id="name" type="text" placeholder="Adın" />
-                </div>
-                <div>
-                    <label for="email">E-posta</label>
-                    <input id="email" type="email" placeholder="ornek@mail.com" />
-                </div>
-                <div>
-                    <label for="msg">Mesajın</label>
-                    <textarea id="msg" placeholder="Tool fikrin, hata bildirimin..."></textarea>
-                </div>
-                <button class="btn btn-primary" type="submit">Gönder (Demo)</button>
-                <p class="note">
-                    Gerçek kullanım için buraya doğrudan e-posta adresini
-                    yazabilirsin: <strong>hasan@example.com</strong> (örnek).
+        <section>
+            <div class="contact-card">
+                <p class="contact-line">
+                    E-mail:
                 </p>
-            </form>
+                <p class="contact-email">
+                    <a href="mailto:hhgkilic@gmail.com" style="color: inherit; text-decoration: none;">
+                        hhgkilic@gmail.com
+                    </a>
+                </p>
+                <p class="contact-line" style="margin-top: 16px;">
+                    You can send questions, suggestions or feedback here.
+                </p>
+            </div>
         </section>
+
+        <footer class="footer">
+            <span>tool-convert · Contact.</span>
+        </footer>
     </main>
 </body>
 </html>
