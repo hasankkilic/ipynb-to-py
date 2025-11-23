@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>İletişim – tool-convert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-inner">
+            <div class="brand">
+                <div class="brand-logo">
+                    <span>TC</span>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-text-title">tool-convert</span>
+                    <span class="brand-text-subtitle">Lightweight dev tools</span>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="tools.html">Converters</a>
+                <a href="contact.html" class="active">İletişim</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-wrap">
+        <section class="hero">
+            <div class="hero-kicker">İletişim</div>
+            <h1 class="hero-title">Öneri ve geri bildirim</h1>
+            <p class="hero-subtitle">
+                Yeni tool fikirlerin, bug raporların veya iş birliği
+                isteklerin için burayı kullanabilirsin. Şimdilik form
+                sadece görsel; e-posta kısmına kendi adresini ekleyebilirsin.
+            </p>
+        </section>
+
+        <section class="card">
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Bu form şu an sadece demo. E-posta adresini sayfada paylaşabilirsin.');">
+                <div>
+                    <label for="name">İsim</label>
+                    <input id="name" type="text" placeholder="Adın" />
+                </div>
+                <div>
+                    <label for="email">E-posta</label>
+                    <input id="email" type="email" placeholder="ornek@mail.com" />
+                </div>
+                <div>
+                    <label for="msg">Mesajın</label>
+                    <textarea id="msg" placeholder="Tool fikrin, hata bildirimin..."></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Gönder (Demo)</button>
+                <p class="note">
+                    Gerçek kullanım için buraya doğrudan e-posta adresini
+                    yazabilirsin: <strong>hasan@example.com</strong> (örnek).
+                </p>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
