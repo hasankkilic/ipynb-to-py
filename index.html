@@ -2,32 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>IPYNB to Python Converter – tool-convert.com</title>
+    <title>tool-convert.com – Simple in-browser converters</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
-            --bg: #f5f5f5;
+            --bg: #f4f5fb;
             --card-bg: #ffffff;
-            --border: #e0e0e0;
             --accent: #2563eb;
             --accent-soft: rgba(37, 99, 235, 0.08);
+            --accent-border: rgba(37, 99, 235, 0.35);
             --text-main: #111827;
-            --text-muted: #6b7280;
-            --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.06);
-            --radius-lg: 16px;
+            --text-soft: #6b7280;
+            --border-soft: #e5e7eb;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+            --radius-lg: 18px;
+            --radius-xl: 24px;
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+            "Segoe UI", sans-serif;
             background: var(--bg);
             color: var(--text-main);
-            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            font-size: 18px; /* yazıları biraz büyüttük */
         }
 
         a {
@@ -36,611 +39,694 @@
         }
 
         .page {
-            max-width: 960px;
+            max-width: 1120px;
             margin: 0 auto;
-            padding: 24px 16px 48px;
+            padding: 28px 18px 56px;
         }
 
-        header {
+        /* NAVBAR */
+
+        .navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .logo {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 20px;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
 
-        .logo-mark {
-            width: 26px;
-            height: 26px;
+        .logo-badge {
+            width: 32px;
+            height: 32px;
             border-radius: 999px;
-            background: var(--accent-soft);
-            display: flex;
+            background: #e5edff;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            color: var(--accent);
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1d4ed8;
         }
 
-        nav {
+        .logo-text-small {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            font-weight: 400;
+        }
+
+        .nav-links {
             display: flex;
-            gap: 16px;
-            font-size: 14px;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.98rem;
         }
 
-        nav a {
+        .nav-link {
             padding: 6px 10px;
             border-radius: 999px;
-            color: var(--text-muted);
+            color: var(--text-soft);
+            transition: background 0.18s ease, color 0.18s ease;
         }
 
-        nav a.active {
+        .nav-link:hover {
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--text-main);
+        }
+
+        .nav-link-primary {
             background: var(--accent-soft);
             color: var(--accent);
-            font-weight: 500;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-weight: 550;
         }
 
-        main {
+        /* LAYOUT */
+
+        .layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.3fr);
-            gap: 20px;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 22px;
         }
 
-        @media (max-width: 800px) {
-            main {
+        @media (max-width: 900px) {
+            .layout {
                 grid-template-columns: minmax(0, 1fr);
             }
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border);
-            padding: 20px 20px 18px;
+            padding: 22px 22px 20px;
         }
 
-        .card-header {
-            margin-bottom: 12px;
-        }
+        /* LEFT – UPLOADER */
 
-        .badge {
+        .crumb {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 3px 9px;
+            padding: 5px 11px;
             border-radius: 999px;
-            background: #ecfdf5;
-            color: #15803d;
-            font-size: 11px;
-            font-weight: 500;
-            margin-bottom: 10px;
+            font-size: 0.78rem;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-border);
+            margin-bottom: 12px;
         }
 
-        .badge-dot {
+        .crumb-dot {
             width: 6px;
             height: 6px;
             border-radius: 999px;
-            background: #22c55e;
+            background: #34d399;
         }
 
         h1 {
-            font-size: 24px;
-            margin-bottom: 6px;
+            margin: 0 0 8px;
+            font-size: 1.9rem; /* 2 numara büyüttük */
+            letter-spacing: -0.01em;
         }
 
         .subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
+            margin: 0 0 18px;
+            font-size: 0.98rem;
+            color: var(--text-soft);
+            max-width: 40rem;
         }
 
         .pill-row {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 14px;
+            margin-bottom: 20px;
         }
 
         .pill {
-            font-size: 11px;
-            padding: 4px 10px;
+            font-size: 0.78rem;
+            padding: 5px 10px;
             border-radius: 999px;
-            background: #f3f4f6;
+            background: #f3f4ff;
             color: #4b5563;
         }
 
+        .pill-soft {
+            background: #f3f4f6;
+        }
+
         .drop-zone {
-            margin-top: 18px;
-            border-radius: 14px;
+            border-radius: var(--radius-lg);
             border: 1px dashed #cbd5f5;
-            background: #f9fafb;
-            padding: 24px 18px;
+            background: #f8fafc;
+            padding: 32px 22px;
             text-align: center;
             cursor: pointer;
-            transition: background 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+            transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
         }
 
         .drop-zone.drag-over {
             border-color: var(--accent);
-            background: #eff6ff;
-            transform: translateY(-1px);
+            background: #eef2ff;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
         }
 
         .drop-title {
-            font-weight: 500;
-            margin-bottom: 4px;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
         .drop-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
+            font-size: 0.88rem;
+            color: var(--text-soft);
+            margin-bottom: 18px;
         }
 
-        .drop-hint {
-            font-size: 11px;
-            margin-top: 10px;
-            color: #9ca3af;
-        }
-
-        .btn-primary {
+        .primary-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 8px 14px;
+            gap: 8px;
             border-radius: 999px;
             border: none;
-            outline: none;
-            cursor: pointer;
+            padding: 9px 20px;
             background: var(--accent);
             color: #ffffff;
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
         }
 
-        .btn-primary span {
-            margin-left: 6px;
-            font-size: 12px;
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(37, 99, 235, 0.4);
+            background: #1d4ed8;
         }
 
-        .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
-            font-size: 11px;
-            color: var(--text-muted);
+        .primary-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
         }
 
-        .meta-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        .primary-btn small {
+            font-size: 0.8rem;
+            opacity: 0.9;
         }
 
-        .meta-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 999px;
-            background: #d1d5db;
+        .hint-row {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-soft);
         }
+
+        .hint-row strong {
+            color: #111827;
+        }
+
+        /* RIGHT – PREVIEW */
 
         .preview-card {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            height: 100%;
         }
 
-        .preview-header-title {
-            font-size: 13px;
-            font-weight: 500;
+        .preview-header {
+            margin-bottom: 10px;
         }
 
-        .preview-status {
-            font-size: 12px;
-            color: var(--text-muted);
+        .preview-title {
+            font-size: 0.98rem;
+            font-weight: 600;
+        }
+
+        .preview-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-soft);
         }
 
         .preview-box {
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: #0b1120;
+            background: #020617;
+            border-radius: 16px;
+            padding: 12px 0 10px;
             color: #e5e7eb;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 12px;
-            padding: 12px;
-            max-height: 360px;
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+            Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.78rem;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-scroll {
+            flex: 1;
             overflow: auto;
+            padding: 10px 14px 14px;
             white-space: pre;
         }
 
-        .preview-box.empty {
-            background: #f9fafb;
-            color: #9ca3af;
-            border-style: dashed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-        }
-
-        .preview-footer {
+        .preview-meta {
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 7px 14px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 11px;
-            color: var(--text-muted);
+            font-size: 0.75rem;
+            color: #9ca3af;
         }
 
-        .tool-grid {
-            margin-top: 22px;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
+        .download-link {
+            color: #a5b4fc;
+            font-weight: 500;
+            text-decoration: none;
         }
 
-        @media (max-width: 800px) {
-            .tool-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        /* TOOL CARDS (Converters SECTION) */
+
+        .tools-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 18px;
         }
 
         .tool-card {
-            padding: 10px 10px 9px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
+            flex: 1 1 260px;
             background: #f9fafb;
-            font-size: 12px;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 14px 14px 13px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tool-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .tool-name {
+            font-size: 0.96rem;
+            font-weight: 600;
+        }
+
+        .tool-badge-active {
+            font-size: 0.78rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .tool-badge-soon {
+            font-size: 0.78rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #fef9c3;
+            color: #92400e;
+            border: 1px solid #facc15;
+        }
+
+        .tool-desc {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            margin: 0 0 10px;
+        }
+
+        .tool-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-soft);
+        }
+
+        .tool-open-btn {
+            border-radius: 999px;
+            border: none;
+            padding: 6px 13px;
+            background: #111827;
+            color: #f9fafb;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .tool-open-btn[disabled] {
+            opacity: 0.5;
             cursor: default;
         }
 
-        .tool-card.main {
-            border-color: var(--accent);
-            background: #eff6ff;
+        /* SECTIONS */
+
+        section {
+            margin-top: 40px;
         }
 
-        .tool-label {
-            font-weight: 500;
-            margin-bottom: 4px;
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
         }
 
-        .tool-tag {
-            display: inline-flex;
-            padding: 2px 7px;
-            border-radius: 999px;
-            font-size: 10px;
-            background: #e5e7eb;
-            color: #4b5563;
+        .section-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-soft);
         }
 
-        .tool-tag.soon {
-            background: #fef3c7;
-            color: #92400e;
-        }
+        /* FOOTER */
 
-        .hidden-input {
-            display: none;
-        }
-
-        .btn-link {
-            border: none;
-            background: none;
-            padding: 0;
-            margin: 0;
-            color: var(--accent);
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        footer {
-            margin-top: 32px;
-            font-size: 11px;
-            color: #9ca3af;
+        .footer {
+            margin-top: 38px;
+            font-size: 0.8rem;
             text-align: center;
+            color: var(--text-soft);
         }
     </style>
 </head>
 <body>
 <div class="page">
-    <header>
+    <!-- NAVBAR -->
+    <header class="navbar">
         <div class="logo">
-            <div class="logo-mark">TC</div>
-            <span>tool-convert.com</span>
+            <div class="logo-badge">TC</div>
+            <div>
+                <div>tool-convert.com</div>
+                <div class="logo-text-small">Simple in-browser converters</div>
+            </div>
         </div>
-        <nav>
-            <a href="#" class="active">IPYNB → PY</a>
-            <a href="#">Converters</a>
-            <a href="mailto:hhgkilic@gmail.com">Contact</a>
+        <nav class="nav-links">
+            <a class="nav-link nav-link-primary" href="#ipynb-to-py">IPYNB → PY</a>
+            <a class="nav-link" href="#converters">Converters</a>
+            <a class="nav-link" href="#contact">Contact</a>
         </nav>
     </header>
 
-    <main>
-        <!-- LEFT: Converter -->
-        <section class="card">
-            <div class="card-header">
-                <div class="badge">
-                    <div class="badge-dot"></div>
+    <!-- MAIN TOOL -->
+    <main id="ipynb-to-py">
+        <div class="layout">
+            <!-- LEFT: UPLOADER -->
+            <section class="card">
+                <div class="crumb">
+                    <span class="crumb-dot"></span>
                     IPYNB to Python Converter
                 </div>
                 <h1>IPYNB to Python Converter</h1>
                 <p class="subtitle">
-                    Drag &amp; drop a <code>.ipynb</code> notebook or click the area below.
-                    We’ll extract the code cells and generate a clean <code>.py</code> file.
+                    Drag &amp; drop a <strong>.ipynb</strong> notebook or click the area below.
+                    We’ll extract the code cells and generate a clean <strong>.py</strong> file.
                 </p>
 
                 <div class="pill-row">
-                    <span class="pill">No signup</span>
-                    <span class="pill">Runs in your browser</span>
-                    <span class="pill">Keeps cell order</span>
+                    <div class="pill">No signup</div>
+                    <div class="pill pill-soft">Runs in your browser</div>
+                    <div class="pill pill-soft">Keeps cell order</div>
                 </div>
-            </div>
 
-            <!-- Drop area -->
-            <div id="drop-zone" class="drop-zone">
-                <div class="drop-title">Drop your <code>.ipynb</code> file here</div>
-                <div class="drop-subtitle">or click anywhere in this box to select a file</div>
-                <button id="browse-btn" class="btn-primary" type="button">
-                    Choose notebook
-                    <span>⤓</span>
-                </button>
-                <div class="drop-hint">
-                    Only Jupyter Notebook files (<code>.ipynb</code>) are supported.
+                <div id="drop-zone" class="drop-zone">
+                    <div class="drop-title">Drop your <strong>.ipynb</strong> file here</div>
+                    <div class="drop-subtitle">
+                        or click anywhere in this box to select a file
+                    </div>
+                    <button class="primary-btn" type="button" id="choose-btn">
+                        Choose notebook
+                        <small> (.ipynb) </small>
+                    </button>
+                    <input type="file" id="file-input" accept=".ipynb,application/json" style="display:none" />
+                    <div class="hint-row">
+                        <span>Only Jupyter Notebook files (<strong>.ipynb</strong>) are supported.</span>
+                        <br />
+                        <span>Works locally in the browser · Best for Jupyter / Colab notebooks.</span>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <input
-                type="file"
-                id="file-input"
-                class="hidden-input"
-                accept=".ipynb,application/json"
-            />
+            <!-- RIGHT: PREVIEW -->
+            <section class="card preview-card">
+                <div class="preview-header">
+                    <div class="preview-title">Python output preview</div>
+                    <div class="preview-subtitle">
+                        Preview of the generated Python file.
+                    </div>
+                </div>
 
-            <div class="meta-row">
-                <div class="meta-item">
-                    <span class="meta-dot"></span>
-                    <span>Works locally in the browser</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-dot"></span>
-                    <span>Best for Jupyter / Colab notebooks</span>
-                </div>
-            </div>
+                <div class="preview-box">
+                    <div class="preview-scroll" id="output-preview">
+# Converted from Jupyter Notebook
+# tool-convert.com – IPYNB → PY
 
-            <!-- Tool list -->
-            <div class="tool-grid">
-                <div class="tool-card main">
-                    <div class="tool-label">IPYNB → PY Converter</div>
-                    <div class="tool-tag">Active</div>
+# Cell 1
+# ----------------------------------------
+# Your converted Python code will appear here
+# after you drop a .ipynb file on the left.
+                    </div>
+                    <div class="preview-meta">
+                        <span id="file-meta">No file loaded</span>
+                        <a id="download-link" class="download-link" href="#" download="notebook.py"
+                           style="pointer-events:none; opacity:0.4;">Download .py file</a>
+                    </div>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-label">PY → IPYNB</div>
-                    <div class="tool-tag soon">Soon</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-label">JSON Beautifier</div>
-                    <div class="tool-tag soon">Soon</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- RIGHT: Preview -->
-        <section class="card preview-card">
-            <div>
-                <div class="preview-header-title">Python output preview</div>
-                <div id="preview-status" class="preview-status">
-                    No file loaded yet. Drop a notebook on the left to see the generated code.
-                </div>
-            </div>
-
-            <div id="preview-box" class="preview-box empty">
-                Converted Python code will appear here.
-            </div>
-
-            <div class="preview-footer">
-                <span id="file-info">No file selected</span>
-                <button id="download-btn" class="btn-link" type="button" disabled>
-                    Download .py file
-                </button>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
-    <footer>
-        tool-convert.com &middot; Simple in-browser converters
+    <!-- CONVERTERS SECTION -->
+    <section id="converters">
+        <h2 class="section-title">Converters</h2>
+        <p class="section-subtitle">
+            A small toolbox of browser-based utilities. Only the first converter is active for now;
+            the others are coming soon.
+        </p>
+
+        <div class="tools-row">
+            <div class="tool-card">
+                <div>
+                    <div class="tool-card-header">
+                        <div class="tool-name">IPYNB → PY Converter</div>
+                        <span class="tool-badge-active">Active</span>
+                    </div>
+                    <p class="tool-desc">
+                        Extracts code cells from a Jupyter notebook and builds a clean Python file.
+                    </p>
+                </div>
+                <div class="tool-footer">
+                    <span>Runs fully in your browser</span>
+                    <button class="tool-open-btn" type="button" onclick="scrollToTool()">Open tool</button>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div>
+                    <div class="tool-card-header">
+                        <div class="tool-name">PY → IPYNB</div>
+                        <span class="tool-badge-soon">Soon</span>
+                    </div>
+                    <p class="tool-desc">
+                        Turn a Python script back into a simple Jupyter notebook with one cell per block.
+                    </p>
+                </div>
+                <div class="tool-footer">
+                    <span>Planned feature</span>
+                    <button class="tool-open-btn" type="button" disabled>Open tool</button>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div>
+                    <div class="tool-card-header">
+                        <div class="tool-name">JSON Beautifier</div>
+                        <span class="tool-badge-soon">Soon</span>
+                    </div>
+                    <p class="tool-desc">
+                        Paste JSON and get nicely formatted, human-readable output with validation.
+                    </p>
+                </div>
+                <div class="tool-footer">
+                    <span>Planned feature</span>
+                    <button class="tool-open-btn" type="button" disabled>Open tool</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-subtitle">
+            For feedback, feature ideas or bug reports you can reach Hasan at:
+        </p>
+        <p style="margin-top:10px; font-size:0.96rem;">
+            <strong>Email:</strong>
+            <a href="mailto:hhgkilic@gmail.com">hhgkilic@gmail.com</a>
+        </p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        tool-convert.com · Simple in-browser converters
     </footer>
 </div>
 
 <script>
+    // Smooth scroll from "Open tool" button in Converters section
+    function scrollToTool() {
+        const el = document.getElementById("ipynb-to-py");
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+
     const dropZone = document.getElementById("drop-zone");
     const fileInput = document.getElementById("file-input");
-    const browseBtn = document.getElementById("browse-btn");
-    const previewBox = document.getElementById("preview-box");
-    const previewStatus = document.getElementById("preview-status");
-    const downloadBtn = document.getElementById("download-btn");
-    const fileInfo = document.getElementById("file-info");
+    const chooseBtn = document.getElementById("choose-btn");
+    const previewEl = document.getElementById("output-preview");
+    const fileMeta = document.getElementById("file-meta");
+    const downloadLink = document.getElementById("download-link");
 
-    let lastPyCode = "";
-    let lastFileName = "";
+    let lastPyBlobUrl = null;
 
-    // ---- helpers ----
-    function isIpynb(file) {
-        if (!file) return false;
-        const name = file.name || "";
-        const lower = name.toLowerCase();
-        return lower.endsWith(".ipynb") || lower.endsWith(".json");
+    function setDownloadContent(pyText, filename) {
+        if (lastPyBlobUrl) {
+            URL.revokeObjectURL(lastPyBlobUrl);
+        }
+        const blob = new Blob([pyText], { type: "text/x-python" });
+        lastPyBlobUrl = URL.createObjectURL(blob);
+        downloadLink.href = lastPyBlobUrl;
+        downloadLink.download = filename || "notebook.py";
+        downloadLink.style.pointerEvents = "auto";
+        downloadLink.style.opacity = "1";
     }
 
-    function convertIpynbJsonToPy(json) {
-        if (!json || !Array.isArray(json.cells)) {
-            return "# Could not find any cells in this notebook.";
-        }
+    function updatePreviewPlaceholder() {
+        previewEl.textContent =
+            "# Converted from Jupyter Notebook\n" +
+            "# tool-convert.com – IPYNB → PY\n\n" +
+            "# Cell 1\n" +
+            "# ----------------------------------------\n" +
+            "# Your converted Python code will appear here\n" +
+            "# after you drop a .ipynb file on the left.";
+        fileMeta.textContent = "No file loaded";
+        downloadLink.style.pointerEvents = "none";
+        downloadLink.style.opacity = "0.4";
+    }
 
-        const lines = [];
-        lines.push("# Converted from Jupyter Notebook");
-        lines.push("# tool-convert.com – IPYNB → PY");
-        lines.push("");
+    function convertIpynbToPy(text, fileName) {
+        try {
+            const data = JSON.parse(text);
+            const cells = Array.isArray(data.cells) ? data.cells : [];
+            const lines = [];
 
-        json.cells.forEach((cell, index) => {
-            if (!cell || cell.cell_type !== "code") {
-                return;
+            lines.push("# Converted from Jupyter Notebook");
+            lines.push("# tool-convert.com – IPYNB → PY");
+            if (fileName) {
+                lines.push("# Source: " + fileName);
             }
-            const src = Array.isArray(cell.source) ? cell.source.join("") : String(cell.source || "");
-            const codeLines = src.split("\n");
-
-            // separator between cells
             lines.push("");
-            lines.push(`# Cell ${index + 1}`);
-            lines.push("#" + "-".repeat(38));
 
-            codeLines.forEach((line) => {
-                // basit: magic komutlarını yoruma çevir (%, !)
-                if (line.trim().startsWith("%") || line.trim().startsWith("!")) {
-                    lines.push("# " + line);
-                } else {
-                    lines.push(line);
+            let codeCellIndex = 0;
+
+            cells.forEach((cell) => {
+                if (cell.cell_type === "code") {
+                    codeCellIndex += 1;
+                    lines.push("# Cell " + codeCellIndex);
+                    lines.push("#" + "-".repeat(40));
+
+                    const src = Array.isArray(cell.source) ? cell.source : [];
+                    src.forEach((line) => {
+                        lines.push(line.replace(/\r?\n$/, ""));
+                    });
+                    lines.push("");
                 }
             });
-        });
 
-        if (lines.length === 0) {
-            return "# No code cells found in this notebook.";
-        }
+            if (codeCellIndex === 0) {
+                lines.push("# (No code cells were found in this notebook.)");
+            }
 
-        return lines.join("\n").trim() + "\n";
-    }
-
-    function showPreview(pyCode) {
-        if (!pyCode) {
-            previewBox.classList.add("empty");
-            previewBox.textContent = "Converted Python code will appear here.";
-            previewStatus.textContent = "No file loaded.";
-        } else {
-            previewBox.classList.remove("empty");
-            previewBox.textContent = pyCode;
-            previewStatus.textContent = "Preview of the generated Python file.";
+            return lines.join("\n");
+        } catch (err) {
+            console.error("Conversion error:", err);
+            return (
+                "# Failed to parse .ipynb file.\n" +
+                "# Make sure you uploaded a valid Jupyter notebook.\n" +
+                "# Error: " +
+                (err && err.message ? err.message : String(err))
+            );
         }
     }
 
-    function enableDownload(pyCode, originalName) {
-        if (!pyCode) {
-            downloadBtn.disabled = true;
-            return;
-        }
-        downloadBtn.disabled = false;
-        lastPyCode = pyCode;
-        lastFileName = (originalName || "notebook").replace(/\.ipynb$/i, "") + ".py";
-    }
-
-    // ---- core handler ----
     function handleFile(file) {
         if (!file) return;
 
-        if (!isIpynb(file)) {
-            previewStatus.textContent = "Unsupported file type. Please select a .ipynb file.";
-            showPreview("");
-            fileInfo.textContent = "Invalid file type";
-            downloadBtn.disabled = true;
-            return;
-        }
-
         const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const text = event.target.result;
-                const json = JSON.parse(text);
-                const pyCode = convertIpynbJsonToPy(json);
-
-                showPreview(pyCode);
-                enableDownload(pyCode, file.name);
-                fileInfo.textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
-            } catch (err) {
-                console.error(err);
-                previewStatus.textContent = "Failed to parse notebook. Is this a valid .ipynb file?";
-                showPreview("");
-                fileInfo.textContent = "Error reading file";
-                downloadBtn.disabled = true;
-            }
+        reader.onload = (ev) => {
+            const text = String(ev.target.result || "");
+            const py = convertIpynbToPy(text, file.name || "");
+            previewEl.textContent = py;
+            fileMeta.textContent = file.name + " (" + file.size + " bytes)";
+            setDownloadContent(py, (file.name || "notebook").replace(/\.ipynb$/i, "") + ".py");
         };
         reader.onerror = () => {
-            previewStatus.textContent = "Could not read the file.";
-            showPreview("");
-            fileInfo.textContent = "Read error";
-            downloadBtn.disabled = true;
+            previewEl.textContent =
+                "# Failed to read file.\n# Please try again with a valid .ipynb notebook.";
+            fileMeta.textContent = "Read error";
+            downloadLink.style.pointerEvents = "none";
+            downloadLink.style.opacity = "0.4";
         };
         reader.readAsText(file);
     }
 
-    // ---- events: click to open ----
-    browseBtn.addEventListener("click", () => {
-        fileInput.click();
-    });
+    // Click on button → open file dialog
+    chooseBtn.addEventListener("click", () => fileInput.click());
+    dropZone.addEventListener("click", () => fileInput.click());
 
-    dropZone.addEventListener("click", (e) => {
-        // Sadece butona çift tıklama vs. fark etmez: kutuya tıklayınca da file chooser açılsın
-        if (e.target !== browseBtn) {
-            fileInput.click();
+    // file input change
+    fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+            handleFile(file);
         }
     });
 
-    fileInput.addEventListener("change", (event) => {
-        const file = event.target.files && event.target.files[0];
-        handleFile(file);
-        // aynı dosyayı yeniden seçebilmek için sıfırla
-        fileInput.value = "";
+    // drag & drop events
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("drag-over");
     });
 
-    // ---- drag & drop events ----
-    ["dragenter", "dragover"].forEach((eventName) => {
-        dropZone.addEventListener(eventName, (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            dropZone.classList.add("drag-over");
-        });
-    });
-
-    ["dragleave", "dragend", "drop"].forEach((eventName) => {
-        dropZone.addEventListener(eventName, (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (eventName !== "drop") {
-                dropZone.classList.remove("drag-over");
-            }
-        });
-    });
-
-    dropZone.addEventListener("drop", (event) => {
+    dropZone.addEventListener("dragleave", (e) => {
+        e.preventDefault();
         dropZone.classList.remove("drag-over");
-        const dt = event.dataTransfer;
-        if (!dt || !dt.files || dt.files.length === 0) {
-            return;
-        }
-        const file = dt.files[0];
-        handleFile(file);
     });
 
-    // ---- download ----
-    downloadBtn.addEventListener("click", () => {
-        if (!lastPyCode) return;
-        const blob = new Blob([lastPyCode], { type: "text/x-python;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = lastFileName || "notebook.py";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("drag-over");
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) {
+            handleFile(file);
+        }
     });
 
     // initial state
-    showPreview("");
+    updatePreviewPlaceholder();
 </script>
 </body>
 </html>
