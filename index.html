@@ -1,104 +1,99 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>tool-convert – Hızlı dosya dönüştürme araçları</title>
+    <title>tool-convert – Lightweight dev tools</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-inner">
-            <div class="brand">
-                <div class="brand-logo">
-                    <span>TC</span>
-                </div>
-                <div class="brand-text">
-                    <span class="brand-text-title">tool-convert</span>
-                    <span class="brand-text-subtitle">Lightweight dev tools</span>
-                </div>
-            </div>
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-mark"></div>
+                <span class="nav-logo-text">tool-convert</span>
+            </a>
             <nav class="nav-links">
-                <a href="index.html" class="active">Ana Sayfa</a>
-                <a href="tools.html">Converters</a>
-                <a href="contact.html">İletişim</a>
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="#tools" class="nav-link">Converters</a>
+                <a href="contact.html" class="nav-link">Contact</a>
             </nav>
         </div>
     </header>
 
-    <main class="page-wrap">
-        <section class="hero">
-            <div class="hero-kicker">Developer tools</div>
-            <h1 class="hero-title">Tek sayfalık değil, mini bir tool platformu.</h1>
-            <p class="hero-subtitle">
-                IPYNB → PY dönüştürücü ile başladık. Zamanla JSON, CSV, metin ve
-                diğer popüler formatlar için küçük ama hızlı araçlar
-                eklenecek.
+    <!-- PAGE CONTENT -->
+    <main class="page">
+        <section class="page-header">
+            <div class="page-eyebrow">Developer utilities</div>
+            <h1 class="page-title">Fast, minimal, browser-only tools.</h1>
+            <p class="page-subtitle">
+                No login, no tracking. Just a few clean utilities you can keep in
+                your bookmarks. Start with the IPYNB → PY converter, more tools
+                will follow here.
             </p>
+
+            <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="converter-ipynb-to-py.html" class="btn btn-primary">
+                    Open IPYNB → PY Converter
+                </a>
+                <a href="#tools" class="btn">Browse all converters</a>
+            </div>
         </section>
 
-        <section class="card">
-            <h2 style="font-size:16px; margin-bottom:10px;">Şu an aktif olan araç</h2>
-            <div class="grid" style="margin-bottom:18px;">
-                <article class="tool-card active">
-                    <span class="tool-label">
-                        <span class="tool-label-dot"></span>
-                        Aktif · Kullanıma hazır
+        <!-- TOOL GRID -->
+        <section id="tools">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="font-size: 20px; margin: 0; color: #111827;">
+                    Converters
+                </h2>
+                <span style="font-size: 13px; color: #6b7280;">
+                    Currently 1 active tool
+                </span>
+            </div>
+
+            <div class="tool-grid">
+                <!-- IPYNB → PY -->
+                <article class="tool-card">
+                    <span class="tool-tag">
+                        <span>Notebook</span>
+                        <span>→</span>
+                        <span>Script</span>
                     </span>
                     <h3 class="tool-title">IPYNB → PY Converter</h3>
                     <p class="tool-desc">
-                        Jupyter Notebook (.ipynb) dosyalarındaki kod hücrelerini
-                        alıp, tek bir Python (.py) dosyası hâline getirir.
+                        Paste your Jupyter notebook JSON and get a clean Python
+                        script. Works fully in your browser – nothing is uploaded.
                     </p>
-                    <div class="tool-chip-row">
-                        <span class="chip">Notebook → Script</span>
-                        <span class="chip">Tamamen tarayıcıda</span>
-                        <span class="chip">Dosya sunucuya yüklenmez</span>
+                    <div class="tool-footer">
+                        <span>Safe • Offline-friendly</span>
+                        <a href="converter-ipynb-to-py.html" class="btn" style="font-size: 13px;">
+                            Open tool
+                        </a>
                     </div>
-                    <a href="ipynb-to-py.html">Aracı aç</a>
-                </article>
-            </div>
-
-            <h2 style="font-size:15px; margin-bottom:8px;">Yakında eklenecekler</h2>
-            <p class="hero-subtitle" style="margin-bottom:14px;">
-                Bu araçlar henüz pasif, sadece fikir olarak listede duruyorlar:
-            </p>
-
-            <div class="grid">
-                <article class="tool-card">
-                    <span class="tool-label">Planlanıyor</span>
-                    <h3 class="tool-title">PY → IPYNB Converter</h3>
-                    <p class="tool-desc">
-                        Python script dosyasından basit Jupyter Notebook üretme.
-                    </p>
                 </article>
 
+                <!-- Gelecekte başka tool'lar için boş kart (şimdilik pasif) -->
                 <article class="tool-card">
-                    <span class="tool-label">Planlanıyor</span>
-                    <h3 class="tool-title">JSON Beautifier</h3>
+                    <span class="tool-tag">
+                        <span>Coming soon</span>
+                    </span>
+                    <h3 class="tool-title">More converters</h3>
                     <p class="tool-desc">
-                        JSON verilerini otomatik girintileme ve formatlama.
+                        JSON beautifier, CSV → JSON, Markdown → HTML and more
+                        helpers will live here as you extend the platform.
                     </p>
-                </article>
-
-                <article class="tool-card">
-                    <span class="tool-label">Planlanıyor</span>
-                    <h3 class="tool-title">CSV → JSON Converter</h3>
-                    <p class="tool-desc">
-                        Basit CSV dosyalarını hızlı bir şekilde JSON'a çevirme.
-                    </p>
-                </article>
-
-                <article class="tool-card">
-                    <span class="tool-label">Planlanıyor</span>
-                    <h3 class="tool-title">Text Formatter</h3>
-                    <p class="tool-desc">
-                        Gereksiz boşlukları temizleyen, satırları düzenleyen
-                        basit metin aracı.
-                    </p>
+                    <div class="tool-footer">
+                        <span>Planned</span>
+                        <span style="font-size: 12px; color: #9ca3af;">Not active yet</span>
+                    </div>
                 </article>
             </div>
         </section>
+
+        <footer class="footer">
+            <span>tool-convert · Simple tools for everyday dev work.</span>
+        </footer>
     </main>
 </body>
 </html>
