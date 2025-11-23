@@ -6,6 +6,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
 </head>
+    <script>
+    // "Open tool" butonuna basınca aşağıdaki paneli göster
+    const openToolButton = document.getElementById("open-ipynb-tool");
+    const converterPanel = document.getElementById("ipynb-converter-panel");
+
+    if (openToolButton && converterPanel) {
+        openToolButton.addEventListener("click", () => {
+            converterPanel.classList.remove("hidden");
+            converterPanel.scrollIntoView({ behavior: "smooth" });
+        });
+    }
+
+    // Drag & drop + file input mantığı
+    const dropArea = document.getElementById("drop-area");
+    const fileInput = document.getElementById("file-input");
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if (dropArea && fileInput) {
+        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+            dropArea.addEventListener(
+                eventName,
+                () => dropArea.classList.add("is-dragover"),
+                false
+            );
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+            dropArea.addEventListener(
+                eventName,
+                () => dropArea.classList.remove("is-dragover"),
+                false
+            );
+        });
+
+        // Alanın içine tıklayınca normal dosya seçim penceresini aç
+        dropArea.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        // Seçilen dosya (click ile)
+        fileInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+
+        // Sürükleyip bırakılan dosya
+        dropArea.addEventListener("drop", (e) => {
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+    }
+
+    function handleFile(file) {
+        if (!file) return;
+
+        if (!file.name.toLowerCase().endsWith(".ipynb")) {
+            alert("Lütfen .ipynb uzantılı bir dosya seçin.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            try {
+                const notebook = JSON.parse(event.target.result);
+                const cells = notebook.cells || [];
+                let pyCode = "";
+
+                cells.forEach((cell) => {
+                    if (cell.cell_type === "code") {
+                        // source genelde string listesi şeklinde gelir
+                        pyCode += cell.source.join("") + "\n\n";
+                    }
+                });
+
+                if (!pyCode.trim()) {
+                    alert("Notebook içinde kod hücresi bulunamadı.");
+                    return;
+                }
+
+                const blob = new Blob([pyCode], {
+                    type: "text/x-python;charset=utf-8",
+                });
+
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = file.name.replace(/\.ipynb$/i, "") + ".py";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error(err);
+                alert(
+                    "Dosya okunurken bir hata oluştu. Geçerli bir .ipynb dosyası olduğundan emin olun."
+                );
+            }
+        };
+
+        reader.readAsText(file);
+    }
+</script>
 <body>
     <!-- NAVBAR -->
     <header class="navbar">
@@ -106,4 +216,5 @@
 </main>
 </body>
 </html>
+
 
