@@ -20,22 +20,20 @@ html, body {
     top: 0;
     z-index: 100;
 
-    /* ✔️ Yeni arka plan deseni */
-    .navbar {
-    background: linear-gradient(
+    /* ✔️ Üstte çok hafif cetvel / şerit efekti */
+    background:
+        linear-gradient(
             120deg,
-            rgba(0,0,0,0.04) 0%,
-            rgba(0,0,0,0.02) 50%,
-            rgba(0,0,0,0.04) 100%
+            rgba(0, 0, 0, 0.04) 0%,
+            rgba(0, 0, 0, 0.02) 50%,
+            rgba(0, 0, 0, 0.04) 100%
         ),
         #ffffff;
-}
 
     backdrop-filter: blur(8px);
     border-bottom: 1px solid #e5e7eb;
 
     padding: 16px 20px;
-    border-radius: 14px;
     margin-bottom: 22px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 
@@ -44,6 +42,8 @@ html, body {
     justify-content: space-between;
 }
 
+/* Eğer nav-inner kullanıyorsan, bu blok da dursun,
+   kullanmıyorsan zarar vermez. */
 .nav-inner {
     max-width: 960px;
     margin: 0 auto;
@@ -294,7 +294,7 @@ html, body {
     gap: 10px;
 }
 
-/* Burası preview scroll düzeltmesi ekli */
+/* PYTHON ÇIKTI ÖNİZLEME SABİT YÜKSEKLİK */
 
 .output-preview,
 .preview-scroll {
@@ -357,4 +357,3 @@ html, body {
     color: #9ca3af;
     text-align: center;
 }
-
