@@ -1,303 +1,930 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>IPYNB → PY Converter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <title>Tool Convert – Online Code & Text Tools</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description"
+          content="IPYNB to PY, PY to IPYNB, JSON Beautifier, CSV to JSON, metin formatlama ve daha fazlası için online dönüştürücü araçlar." />
 
     <style>
+        :root {
+            --bg: #020617;
+            --bg-alt: #0f172a;
+            --card-bg: #0b1220;
+            --accent: #38bdf8;
+            --accent-soft: rgba(56, 189, 248, 0.12);
+            --text: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border: #1f2937;
+            --radius-xl: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem 3rem;
+            background: radial-gradient(circle at top, #0b1120, #020617);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 0.5rem;
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
-        
-        .subtitle {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #555;
+
+        .page {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            width: 100%;
         }
-        
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
         }
-        
-        .dropzone {
-            border: 2px dashed #888;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 1rem;
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
-        .dropzone.dragover {
-            border-color: #2d7ff9;
-            background: #f3f6ff;
-        }
-        
-        #fileInput {
-            display: none;
-        }
-        
-        button {
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-        
-        button.primary {
-            background: #2d7ff9;
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: radial-gradient(circle at 30% 30%, #38bdf8, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-weight: 800;
+            font-size: 20px;
+            box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
         }
-        
+
+        .logo-text-main {
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+            max-width: 280px;
+            text-align: right;
+        }
+
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .tagline {
+                text-align: left;
+            }
+        }
+
+        .hero {
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.7));
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.75);
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .hero-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .pill-row {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: #e0f2fe;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .tool-grid {
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            background: rgba(15,23,42,0.9);
+            padding: 14px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            max-height: 520px;
+            overflow: auto;
+        }
+
+        .tool-card {
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 10px 11px;
+            background: radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent);
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .tool-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+        }
+
+        .tool-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tool-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.7);
+            color: #cbd5f5;
+            align-self: flex-start;
+        }
+
+        .badge-soon {
+            border-color: rgba(248, 250, 252, 0.2);
+            color: #e5e7eb;
+            background: rgba(248,250,252,0.04);
+        }
+
+        .tool-panel {
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            background: radial-gradient(circle at top left, rgba(56,189,248,0.16), #020617);
+            padding: 18px 18px 16px;
+            min-height: 280px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tool-panel.active {
+            display: flex;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .panel-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        input[type="file"],
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            background: #020617;
+            color: var(--text);
+            font-size: 13px;
+            padding: 7px 9px;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        input[type="file"] {
+            padding: 5px 9px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+            margin-bottom: 4px;
+        }
+
+        button {
+            border-radius: 999px;
+            border: none;
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            background: var(--accent);
+            color: #0b1120;
+        }
+
         button.secondary {
-            background: #eee;
+            background: #111827;
+            color: var(--text);
+            border: 1px solid #1f2937;
         }
-        
+
         button:disabled {
             opacity: 0.6;
-            cursor: not-allowed;
+            cursor: default;
         }
-        
-        .status {
-            margin-top: 0.75rem;
-            font-size: 0.9rem;
-            color: #555;
+
+        .preview-box {
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            background: #020617;
+            padding: 8px 10px;
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 11px;
+            color: #e5e7eb;
+            max-height: 180px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
-        
-        .status.error {
-            color: #c0392b;
-        }
-        
-        textarea {
-            width: 100%;
-            margin-top: 1rem;
-            min-height: 250px;
-            font-family: "Fira Code", Menlo, Monaco, Consolas, monospace;
-            font-size: 0.9rem;
-            padding: 0.75rem;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-        
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            color: #777;
+
+        footer {
+            font-size: 11px;
+            color: var(--text-muted);
             text-align: center;
+            padding: 10px 16px 18px;
+        }
+
+        footer a {
+            color: #bfdbfe;
+            text-decoration: underline;
+            text-decoration-style: dotted;
         }
     </style>
 </head>
-
 <body>
-    <h1>IPYNB → PY Converter</h1>
-    <p class="subtitle">
-        Convert your Jupyter Notebook (<code>.ipynb</code>) to a Python script (
-        <code>.py</code>) in your browser. No upload, no server.
-    </p>
-
-    <div class="card">
-        <div id="dropzone" class="dropzone">
-            <strong>Click to choose a .ipynb file</strong><br> or drag & drop here
+<div class="page">
+    <header>
+        <div class="logo-wrap">
+            <div class="logo-icon">TC</div>
+            <div>
+                <div class="logo-text-main">tool-convert.com</div>
+                <div class="logo-text-sub">Lightweight browser tools • No signup</div>
+            </div>
         </div>
-        <input type="file" id="fileInput" accept=".ipynb,application/json">
+        <div class="tagline">
+            IPYNB ⇄ Python, JSON, CSV ve metin dönüştürme araçları tek yerde.  
+            Tamamen tarayıcıda çalışır.
+        </div>
+    </header>
 
-        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-            <button id="downloadBtn" class="primary" disabled>
-                Download .py
-            </button>
-            <button id="clearBtn" class="secondary">
-                Clear
-            </button>
+    <section class="hero">
+        <div class="hero-title">Hızlı dönüştür, indir ve devam et.</div>
+        <div class="hero-sub">
+            Aşağıdaki listeden bir aracı seç; herhangi bir backend, kurulum veya eklenti yok.
+            Dosya ve kodların tarayıcını terk etmez (client-side).
+        </div>
+        <div class="pill-row">
+            <span class="pill">Client-side only</span>
+            <span class="pill">GitHub Pages uyumlu</span>
+            <span class="pill">IPYNB ⇄ PY</span>
+            <span class="pill">JSON &amp; CSV</span>
+        </div>
+    </section>
+
+    <section class="layout">
+        <!-- LEFT: TOOL GRID -->
+        <div class="tool-grid" id="toolGrid">
+            <!-- 1 -->
+            <div class="tool-card active" data-tool="ipynbToPy">
+                <div class="tool-title">1. IPYNB → PY</div>
+                <div class="tool-desc">Jupyter notebook dosyasını tek dosyalık Python betiğine çevir.</div>
+                <span class="badge">Notebook</span>
+            </div>
+            <!-- 2 -->
+            <div class="tool-card" data-tool="pyToIpynb">
+                <div class="tool-title">2. PY → IPYNB</div>
+                <div class="tool-desc">Python kodunu tek hücrelik basit bir .ipynb dosyasına dönüştür.</div>
+                <span class="badge">Notebook</span>
+            </div>
+            <!-- 3 -->
+            <div class="tool-card" data-tool="jsonBeautify">
+                <div class="tool-title">3. JSON Beautifier</div>
+                <div class="tool-desc">Sıkışık JSON metnini gir; okunabilir hale getir.</div>
+                <span class="badge">JSON</span>
+            </div>
+            <!-- 4 -->
+            <div class="tool-card" data-tool="csvToJson">
+                <div class="tool-title">4. CSV → JSON</div>
+                <div class="tool-desc">Basit CSV verisini satır satır JSON dizisine çevir.</div>
+                <span class="badge">CSV</span>
+            </div>
+            <!-- 5 -->
+            <div class="tool-card" data-tool="pythonMinify">
+                <div class="tool-title">5. Python Minifier (basit)</div>
+                <div class="tool-desc">Yorumları ve boş satırları kaldıran hafif bir minifier.</div>
+                <span class="badge">Python</span>
+            </div>
+            <!-- 6 -->
+            <div class="tool-card" data-tool="textFormatter">
+                <div class="tool-title">6. Text Formatter</div>
+                <div class="tool-desc">Metni UPPER / lower / Trim gibi basit formatlara sok.</div>
+                <span class="badge">Text</span>
+            </div>
+            <!-- 7 -->
+            <div class="tool-card" data-tool="markdownToHtml">
+                <div class="tool-title">7. Markdown → HTML (basit)</div>
+                <div class="tool-desc">Başlık ve kalın yazıları algılayan mini dönüştürücü.</div>
+                <span class="badge">Markdown</span>
+            </div>
+            <!-- 8 -->
+            <div class="tool-card" data-tool="urlEncode">
+                <div class="tool-title">8. URL Encode / Decode</div>
+                <div class="tool-desc">URL’leri tarayıcı uyumlu forma çevir veya geri al.</div>
+                <span class="badge">Web</span>
+            </div>
+            <!-- 9 -->
+            <div class="tool-card" data-tool="base64">
+                <div class="tool-title">9. Base64 Encode / Decode</div>
+                <div class="tool-desc">Metni Base64’e çevir veya çöz.</div>
+                <span class="badge">Utility</span>
+            </div>
+            <!-- 10 -->
+            <div class="tool-card" data-tool="pdfComingSoon">
+                <div class="tool-title">10. PDF → Word / TXT (yakında)</div>
+                <div class="tool-desc">Sunucu tarafı kütüphane isteyen ağır işlem. İleride VPS ile eklenecek.</div>
+                <span class="badge badge-soon">COMING SOON</span>
+            </div>
         </div>
 
-        <div id="status" class="status">
-            Waiting for a notebook file…
+        <!-- RIGHT: ACTIVE TOOL PANEL -->
+        <div id="toolPanels">
+
+            <!-- PANEL 1: IPYNB -> PY -->
+            <div class="tool-panel active" id="panel-ipynbToPy">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">IPYNB → PY Converter</div>
+                        <div class="panel-sub">
+                            .ipynb dosyasındaki <strong>code</strong> hücrelerini okuyup tek bir .py dosyasına birleştirir.
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="ipynbFile">Bir Jupyter notebook dosyası seç (.ipynb):</label>
+                    <input type="file" id="ipynbFile" accept=".ipynb" />
+                </div>
+
+                <div class="btn-row">
+                    <button id="btnConvertIpynb">Dönüştür</button>
+                    <button id="btnDownloadPy" class="secondary" disabled>PY dosyasını indir</button>
+                </div>
+
+                <div>
+                    <label>Önizleme (ilk satırlar):</label>
+                    <div id="ipynbPreview" class="preview-box">Henüz bir dosya seçilmedi.</div>
+                </div>
+            </div>
+
+            <!-- PANEL 2: PY -> IPYNB -->
+            <div class="tool-panel" id="panel-pyToIpynb">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">PY → IPYNB Converter</div>
+                        <div class="panel-sub">
+                            Aşağıya Python kodunu yapıştır; tek hücrelik basit bir notebook oluşturup indir.
+                        </div>
+                    </div>
+                </div>
+
+                <label for="pyInput">Python kodu:</label>
+                <textarea id="pyInput" placeholder="# Buraya Python kodunu gir."></textarea>
+
+                <div class="btn-row">
+                    <button id="btnConvertPyToIpynb">Notebook oluştur</button>
+                    <button id="btnDownloadIpynb" class="secondary" disabled>IPYNB indir</button>
+                </div>
+
+                <label>JSON önizleme (ilk satırlar):</label>
+                <div id="pyToIpynbPreview" class="preview-box"></div>
+            </div>
+
+            <!-- PANEL 3: JSON Beautifier -->
+            <div class="tool-panel" id="panel-jsonBeautify">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">JSON Beautifier</div>
+                        <div class="panel-sub">Sıkışık JSON stringini gir; 2 boşlukla formatlansın.</div>
+                    </div>
+                </div>
+
+                <label for="jsonInput">JSON metni:</label>
+                <textarea id="jsonInput" placeholder='{"foo":1,"bar":[1,2,3]}'></textarea>
+
+                <div class="btn-row">
+                    <button id="btnBeautifyJson">Güzelleştir</button>
+                </div>
+
+                <label>Sonuç:</label>
+                <div id="jsonOutput" class="preview-box"></div>
+            </div>
+
+            <!-- PANEL 4: CSV -> JSON -->
+            <div class="tool-panel" id="panel-csvToJson">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">CSV → JSON Converter</div>
+                        <div class="panel-sub">
+                            İlk satırın başlık olduğunu varsayar. Basit virgülle ayrılmış CSV için uygundur.
+                        </div>
+                    </div>
+                </div>
+
+                <label for="csvInput">CSV verisi:</label>
+                <textarea id="csvInput" placeholder="name,age&#10;Ali,23&#10;Ayşe,25"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnCsvToJson">JSON'a çevir</button>
+                </div>
+
+                <label>JSON çıktısı:</label>
+                <div id="csvJsonOutput" class="preview-box"></div>
+            </div>
+
+            <!-- PANEL 5: Python Minifier -->
+            <div class="tool-panel" id="panel-pythonMinify">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Basit Python Minifier</div>
+                        <div class="panel-sub">
+                            Yorum satırlarını (# ile başlayan) ve tamamen boş satırları kaldırır.
+                            Gelişmiş bir minifier değildir.
+                        </div>
+                    </div>
+                </div>
+
+                <label for="pyMinifyInput">Python kodu:</label>
+                <textarea id="pyMinifyInput" placeholder="# Yorumlar ve boş satırlar silinecek"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnMinifyPy">Minify et</button>
+                </div>
+
+                <label>Sonuç:</label>
+                <div id="pyMinifyOutput" class="preview-box"></div>
+            </div>
+
+            <!-- PANEL 6: Text Formatter -->
+            <div class="tool-panel" id="panel-textFormatter">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Text Formatter</div>
+                        <div class="panel-sub">Metni hızlıca UPPER / lower / Title Case yap.</div>
+                    </div>
+                </div>
+
+                <label for="textInput">Metin:</label>
+                <textarea id="textInput" placeholder="Dönüştürmek istediğin metin"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnUpper">UPPER</button>
+                    <button id="btnLower">lower</button>
+                    <button id="btnTitle">Title Case</button>
+                    <button id="btnTrim" class="secondary">Trim (baş/son boşluk)</button>
+                </div>
+            </div>
+
+            <!-- PANEL 7: Markdown -> HTML -->
+            <div class="tool-panel" id="panel-markdownToHtml">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Markdown → HTML (basit)</div>
+                        <div class="panel-sub">
+                            #, ## başlıkları ve **kalın** yazıyı algılayan küçük bir parser.
+                            Büyük projeler için gerçek bir kütüphane kullanmalısın.
+                        </div>
+                    </div>
+                </div>
+
+                <label for="mdInput">Markdown:</label>
+                <textarea id="mdInput" placeholder="# Başlık&#10;Merhaba **dünya**!"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnMdToHtml">HTML'e çevir</button>
+                </div>
+
+                <label>HTML çıktısı:</label>
+                <div id="mdOutput" class="preview-box"></div>
+            </div>
+
+            <!-- PANEL 8: URL Encode / Decode -->
+            <div class="tool-panel" id="panel-urlEncode">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">URL Encode / Decode</div>
+                        <div class="panel-sub">Türkçe ve özel karakterli URL’leri kodla / çöz.</div>
+                    </div>
+                </div>
+
+                <label for="urlInput">Metin veya URL:</label>
+                <textarea id="urlInput" placeholder="https://tool-convert.com/örnek?ad=hasan"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnUrlEncode">Encode</button>
+                    <button id="btnUrlDecode" class="secondary">Decode</button>
+                </div>
+            </div>
+
+            <!-- PANEL 9: Base64 -->
+            <div class="tool-panel" id="panel-base64">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Base64 Encode / Decode</div>
+                        <div class="panel-sub">Küçük metinler için hızlı Base64 dönüştürücü.</div>
+                    </div>
+                </div>
+
+                <label for="b64Input">Metin:</label>
+                <textarea id="b64Input" placeholder="örnek metin"></textarea>
+
+                <div class="btn-row">
+                    <button id="btnB64Encode">Encode</button>
+                    <button id="btnB64Decode" class="secondary">Decode</button>
+                </div>
+            </div>
+
+            <!-- PANEL 10: PDF Coming Soon -->
+            <div class="tool-panel" id="panel-pdfComingSoon">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">PDF → Word / TXT (yakında)</div>
+                        <div class="panel-sub">
+                            PDF işlemleri için sunucu tarafında <strong>LibreOffice / Poppler / Pandoc</strong>
+                            gibi ağır kütüphaneler gerekir.  
+                            Bunları eklemek için ileride bir VPS kurduğumuzda bu aracı aktif edeceğiz.
+                        </div>
+                    </div>
+                </div>
+
+                <p style="font-size:13px;color:var(--text-muted);margin-top:8px;">
+                    Şimdilik bu alan, roadmap’te durmasını istediğimiz gelecekteki “büyük araçlar”
+                    için bir yer tutucu. Böylece Google’a da “PDF converter” sinyali vermeye başlıyoruz.
+                </p>
+            </div>
+
         </div>
+    </section>
+</div>
 
-        <textarea id="preview" placeholder="Converted Python code will appear here…" readonly></textarea>
-    </div>
+<footer>
+    © <span id="year"></span> tool-convert.com • Built as a lightweight toolbox.  
+    Kaynak kodu GitHub’da barındırılıyor.
+</footer>
 
-    <div class="footer">
-        All conversion happens in your browser. Your notebook never leaves your device.
-    </div>
+<script>
+    // Yıl
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    <script>
-        const dropzone = document.getElementById("dropzone");
-        const fileInput = document.getElementById("fileInput");
-        const statusEl = document.getElementById("status");
-        const previewEl = document.getElementById("preview");
-        const downloadBtn = document.getElementById("downloadBtn");
-        const clearBtn = document.getElementById("clearBtn");
+    // GRID: aktif paneli değiştir
+    const cards = document.querySelectorAll(".tool-card");
+    const panels = document.querySelectorAll(".tool-panel");
 
-        let lastFileName = "notebook";
+    cards.forEach(card => {
+        card.addEventListener("click", () => {
+            const tool = card.getAttribute("data-tool");
 
-        // --- UI helpers ------------------------------------------------------
-        function setStatus(message, isError = false) {
-            statusEl.textContent = message;
-            statusEl.classList.toggle("error", isError);
-        }
+            cards.forEach(c => c.classList.remove("active"));
+            panels.forEach(p => p.classList.remove("active"));
 
-        function resetUI() {
-            previewEl.value = "";
-            downloadBtn.disabled = true;
-            lastFileName = "notebook";
-            setStatus("Waiting for a notebook file…");
-        }
-
-        clearBtn.addEventListener("click", () => resetUI());
-
-        // --- File selection (click) ------------------------------------------
-        dropzone.addEventListener("click", () => fileInput.click());
-
-        fileInput.addEventListener("change", (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                handleFile(file);
-            }
+            card.classList.add("active");
+            const panel = document.getElementById("panel-" + tool);
+            if (panel) panel.classList.add("active");
         });
+    });
 
-        // --- Drag & drop ------------------------------------------------------
-        ["dragenter", "dragover"].forEach(evt =>
-            dropzone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.add("dragover");
-            })
-        );
+    // ---- 1. IPYNB -> PY ----
+    let lastPyBlobUrl = null;
 
-        ["dragleave", "drop"].forEach(evt =>
-            dropzone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.remove("dragover");
-            })
-        );
-
-        dropzone.addEventListener("drop", (e) => {
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                handleFile(file);
-            }
-        });
-
-        // --- Core: convert IPYNB JSON to Python string -----------------------
-        function convertIpynbToPy(notebookJson) {
-            if (!notebookJson || !Array.isArray(notebookJson.cells)) {
-                throw new Error("This file doesn't look like a valid Jupyter notebook.");
-            }
-
-            const lines = [];
-
-            lines.push("# Converted from Jupyter Notebook");
-            if (notebookJson.metadata && notebookJson.metadata.kernelspec) {
-                lines.push(
-                    "# Kernel: " +
-                    (notebookJson.metadata.kernelspec.display_name ||
-                        notebookJson.metadata.kernelspec.name)
-                );
-            }
-            lines.push("");
-
-            notebookJson.cells.forEach((cell, index) => {
-                const cellNum = index + 1;
-
-                if (cell.cell_type === "markdown") {
-                    lines.push(`# %% [markdown] cell ${cellNum}`);
-                    (cell.source || []).forEach(line => {
-                        // Ensure newline & prefix with comment
-                        const clean = line.replace(/\r?\n$/, "");
-                        lines.push("# " + clean);
-                    });
-                    lines.push("");
-                } else if (cell.cell_type === "code") {
-                    lines.push(`# %% code cell ${cellNum}`);
-                    (cell.source || []).forEach(line => {
-                        // Just copy code lines
-                        lines.push(line.replace(/\r?\n$/, ""));
-                    });
-                    lines.push("");
-                } else {
-                    // Unknown cell type – keep as commented
-                    lines.push(`# %% [unknown cell type: ${cell.cell_type}] ${cellNum}`);
-                    (cell.source || []).forEach(line => {
-                        const clean = line.replace(/\r?\n$/, "");
-                        lines.push("# " + clean);
-                    });
-                    lines.push("");
-                }
-            });
-
-            return lines.join("\n");
-        }
-
-        // --- File handling ----------------------------------------------------
-        function handleFile(file) {
-            if (!file.name.toLowerCase().endsWith(".ipynb")) {
-                setStatus("Please select a .ipynb file.", true);
-                return;
-            }
-
-            lastFileName = file.name.replace(/\.ipynb$/i, "");
-            setStatus("Reading file…");
-
+    function readIpynbFile(file) {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    const text = reader.result;
-                    const notebook = JSON.parse(text);
-                    const pyCode = convertIpynbToPy(notebook);
-                    previewEl.value = pyCode;
-                    downloadBtn.disabled = false;
-                    setStatus("Conversion successful. You can review or download the .py file.");
-                } catch (err) {
-                    console.error(err);
-                    setStatus("Failed to convert file: " + err.message, true);
-                    previewEl.value = "";
-                    downloadBtn.disabled = true;
-                }
-            };
-            reader.onerror = () => {
-                setStatus("Error reading file.", true);
-            };
-            reader.readAsText(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error("Dosya okunamadı"));
+            reader.readAsText(file, "utf-8");
+        });
+    }
+
+    function ipynbToPyString(ipynbText) {
+        let nb;
+        try {
+            nb = JSON.parse(ipynbText);
+        } catch (e) {
+            throw new Error("Geçersiz JSON / IPYNB dosyası.");
         }
 
-        // --- Download button --------------------------------------------------
-        downloadBtn.addEventListener("click", () => {
-            const pyCode = previewEl.value;
-            if (!pyCode) return;
+        const cells = nb.cells || [];
+        const lines = [];
 
-            const blob = new Blob([pyCode], {
-                type: "text/x-python"
-            });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = lastFileName + ".py";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            URL.revokeObjectURL(url);
+        cells.forEach(cell => {
+            if (cell.cell_type === "code") {
+                const src = cell.source || [];
+                lines.push("# --- Cell ---");
+                src.forEach(line => {
+                    // Jupyter hücrelerinde satır sonu zaten var olabilir
+                    lines.push(line.replace(/\r?\n$/, ""));
+                });
+                lines.push("");
+            }
         });
-    </script>
-</body>
 
+        if (!lines.length) {
+            lines.push("# Bu notebookta code hücresi bulunamadı.");
+        }
+
+        return lines.join("\n");
+    }
+
+    const ipynbFileInput = document.getElementById("ipynbFile");
+    const ipynbPreview = document.getElementById("ipynbPreview");
+    const btnConvertIpynb = document.getElementById("btnConvertIpynb");
+    const btnDownloadPy = document.getElementById("btnDownloadPy");
+
+    let currentPyText = "";
+
+    btnConvertIpynb.addEventListener("click", async () => {
+        const file = ipynbFileInput.files[0];
+        if (!file) {
+            alert("Lütfen bir .ipynb dosyası seç.");
+            return;
+        }
+
+        try {
+            const text = await readIpynbFile(file);
+            const py = ipynbToPyString(text);
+            currentPyText = py;
+
+            const previewLines = py.split("\n").slice(0, 40).join("\n");
+            ipynbPreview.textContent = previewLines || "(boş çıktı)";
+
+            if (lastPyBlobUrl) URL.revokeObjectURL(lastPyBlobUrl);
+            const blob = new Blob([py], { type: "text/x-python" });
+            lastPyBlobUrl = URL.createObjectURL(blob);
+
+            btnDownloadPy.disabled = false;
+        } catch (e) {
+            alert(e.message);
+        }
+    });
+
+    btnDownloadPy.addEventListener("click", () => {
+        if (!currentPyText || !lastPyBlobUrl) return;
+        const a = document.createElement("a");
+        a.href = lastPyBlobUrl;
+        a.download = "notebook_converted.py";
+        a.click();
+    });
+
+    // ---- 2. PY -> IPYNB ----
+    const pyInput = document.getElementById("pyInput");
+    const btnConvertPyToIpynb = document.getElementById("btnConvertPyToIpynb");
+    const btnDownloadIpynb = document.getElementById("btnDownloadIpynb");
+    const pyToIpynbPreview = document.getElementById("pyToIpynbPreview");
+    let lastIpynbBlobUrl = null;
+
+    btnConvertPyToIpynb.addEventListener("click", () => {
+        const code = pyInput.value || "";
+        const lines = code.split("\n").map(l => l + "\n");
+
+        const nb = {
+            nbformat: 4,
+            nbformat_minor: 5,
+            metadata: {},
+            cells: [
+                {
+                    cell_type: "code",
+                    metadata: {},
+                    source: lines,
+                    outputs: [],
+                    execution_count: null
+                }
+            ]
+        };
+
+        const json = JSON.stringify(nb, null, 2);
+        pyToIpynbPreview.textContent = json.split("\n").slice(0, 40).join("\n");
+
+        if (lastIpynbBlobUrl) URL.revokeObjectURL(lastIpynbBlobUrl);
+        const blob = new Blob([json], { type: "application/json" });
+        lastIpynbBlobUrl = URL.createObjectURL(blob);
+
+        btnDownloadIpynb.disabled = false;
+    });
+
+    btnDownloadIpynb.addEventListener("click", () => {
+        if (!lastIpynbBlobUrl) return;
+        const a = document.createElement("a");
+        a.href = lastIpynbBlobUrl;
+        a.download = "script_converted.ipynb";
+        a.click();
+    });
+
+    // ---- 3. JSON Beautifier ----
+    const jsonInput = document.getElementById("jsonInput");
+    const jsonOutput = document.getElementById("jsonOutput");
+    document.getElementById("btnBeautifyJson").addEventListener("click", () => {
+        const raw = jsonInput.value;
+        try {
+            const obj = JSON.parse(raw);
+            jsonOutput.textContent = JSON.stringify(obj, null, 2);
+        } catch (e) {
+            jsonOutput.textContent = "Geçersiz JSON: " + e.message;
+        }
+    });
+
+    // ---- 4. CSV -> JSON ----
+    const csvInput = document.getElementById("csvInput");
+    const csvJsonOutput = document.getElementById("csvJsonOutput");
+    document.getElementById("btnCsvToJson").addEventListener("click", () => {
+        const text = csvInput.value.trim();
+        if (!text) {
+            csvJsonOutput.textContent = "Önce CSV verisi gir.";
+            return;
+        }
+
+        const lines = text.split(/\r?\n/);
+        if (lines.length < 2) {
+            csvJsonOutput.textContent = "En az bir başlık ve bir veri satırı gerekli.";
+            return;
+        }
+
+        const headers = lines[0].split(",");
+        const rows = lines.slice(1).map(line => line.split(","));
+        const out = rows.map(row => {
+            const obj = {};
+            headers.forEach((h, i) => {
+                obj[h.trim()] = (row[i] || "").trim();
+            });
+            return obj;
+        });
+
+        csvJsonOutput.textContent = JSON.stringify(out, null, 2);
+    });
+
+    // ---- 5. Python Minifier ----
+    const pyMinifyInput = document.getElementById("pyMinifyInput");
+    const pyMinifyOutput = document.getElementById("pyMinifyOutput");
+    document.getElementById("btnMinifyPy").addEventListener("click", () => {
+        const lines = pyMinifyInput.value.split("\n");
+        const out = lines.filter(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return false;
+            if (trimmed.startsWith("#")) return false;
+            return true;
+        });
+        pyMinifyOutput.textContent = out.join("\n");
+    });
+
+    // ---- 6. Text Formatter ----
+    const textInput = document.getElementById("textInput");
+    document.getElementById("btnUpper").addEventListener("click", () => {
+        textInput.value = textInput.value.toUpperCase();
+    });
+    document.getElementById("btnLower").addEventListener("click", () => {
+        textInput.value = textInput.value.toLowerCase();
+    });
+    document.getElementById("btnTitle").addEventListener("click", () => {
+        textInput.value = textInput.value
+            .toLowerCase()
+            .split(/\s+/)
+            .map(w => w ? w[0].toUpperCase() + w.slice(1) : "")
+            .join(" ");
+    });
+    document.getElementById("btnTrim").addEventListener("click", () => {
+        textInput.value = textInput.value.trim();
+    });
+
+    // ---- 7. Markdown -> HTML (çok basit) ----
+    const mdInput = document.getElementById("mdInput");
+    const mdOutput = document.getElementById("mdOutput");
+    document.getElementById("btnMdToHtml").addEventListener("click", () => {
+        let text = mdInput.value;
+
+        // Basit dönüşümler (gerçek markdown parser değil)
+        text = text.replace(/^###### (.*)$/gm, "<h6>$1</h6>");
+        text = text.replace(/^##### (.*)$/gm, "<h5>$1</h5>");
+        text = text.replace(/^#### (.*)$/gm, "<h4>$1</h4>");
+        text = text.replace(/^### (.*)$/gm, "<h3>$1</h3>");
+        text = text.replace(/^## (.*)$/gm, "<h2>$1</h2>");
+        text = text.replace(/^# (.*)$/gm, "<h1>$1</h1>");
+        text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        text = text.replace(/\*(.+?)\*/g, "<em>$1</em>");
+        text = text.replace(/\n/g, "<br>");
+
+        mdOutput.innerHTML = text;
+    });
+
+    // ---- 8. URL Encode/Decode ----
+    const urlInput = document.getElementById("urlInput");
+    document.getElementById("btnUrlEncode").addEventListener("click", () => {
+        urlInput.value = encodeURIComponent(urlInput.value);
+    });
+    document.getElementById("btnUrlDecode").addEventListener("click", () => {
+        try {
+            urlInput.value = decodeURIComponent(urlInput.value);
+        } catch (e) {
+            alert("Decode edilemedi: " + e.message);
+        }
+    });
+
+    // ---- 9. Base64 ----
+    const b64Input = document.getElementById("b64Input");
+    document.getElementById("btnB64Encode").addEventListener("click", () => {
+        try {
+            b64Input.value = btoa(unescape(encodeURIComponent(b64Input.value)));
+        } catch (e) {
+            alert("Encode hatası: " + e.message);
+        }
+    });
+    document.getElementById("btnB64Decode").addEventListener("click", () => {
+        try {
+            b64Input.value = decodeURIComponent(escape(atob(b64Input.value)));
+        } catch (e) {
+            alert("Decode hatası: " + e.message);
+        }
+    });
+</script>
+</body>
 </html>
