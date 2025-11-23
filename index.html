@@ -2,219 +2,194 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>tool-convert – Lightweight dev tools</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>tool-convert – IPYNB to Python Converter</title>
+
+    <!-- Senin CSS’in (değiştirmiyoruz) -->
     <link rel="stylesheet" href="styles.css" />
 </head>
-    <script>
-    // "Open tool" butonuna basınca aşağıdaki paneli göster
-    const openToolButton = document.getElementById("open-ipynb-tool");
-    const converterPanel = document.getElementById("ipynb-converter-panel");
 
-    if (openToolButton && converterPanel) {
-        openToolButton.addEventListener("click", () => {
-            converterPanel.classList.remove("hidden");
-            converterPanel.scrollIntoView({ behavior: "smooth" });
-        });
-    }
+<body>
 
-    // Drag & drop + file input mantığı
+<!-- NAVBAR (dokunmadım) -->
+<header class="navbar">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-mark"></div>
+            <span class="nav-logo-text">tool-convert</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+    </div>
+</header>
+
+
+<!-- ANA SAYFA -->
+<main class="page">
+
+    <!-- ÜST BAŞLIK -->
+    <section style="margin-bottom: 30px;">
+        <h1 class="page-title">IPYNB to Python Converter</h1>
+        <p class="page-subtitle">
+            Jupyter Notebook (.ipynb) dosyalarını saniyeler içinde saf Python (.py) formatına dönüştürün.
+        </p>
+    </section>
+
+    <!-- 3 TOOL KARTI -->
+    <section>
+        <h2 style="font-size: 20px; margin-bottom: 10px;">Converters</h2>
+
+        <div class="tool-grid">
+
+            <!-- ÇALIŞAN IPYNB → PY -->
+            <article class="tool-card">
+                <h3 class="tool-title">IPYNB to Python</h3>
+                <p class="tool-desc">
+                    Notebook içindeki tüm kod hücrelerini toplayıp .py dosyasına dönüştürür.
+                </p>
+                <button id="open-ipynb-tool" class="btn btn-primary">
+                    Open tool
+                </button>
+            </article>
+
+            <!-- SOON TOOL 1 -->
+            <article class="tool-card">
+                <h3 class="tool-title">PY to IPYNB</h3>
+                <p class="tool-desc">
+                    <strong>Soon:</strong> Python → Notebook dönüştürücü.
+                </p>
+                <button class="btn" disabled>Soon</button>
+            </article>
+
+            <!-- SOON TOOL 2 -->
+            <article class="tool-card">
+                <h3 class="tool-title">JSON Beautifier</h3>
+                <p class="tool-desc">
+                    <strong>Soon:</strong> JSON formatlama aracı.
+                </p>
+                <button class="btn" disabled>Soon</button>
+            </article>
+
+        </div>
+    </section>
+
+
+    <!-- AÇILAN DÖNÜŞTÜRÜCÜ PANELİ -->
+    <section id="ipynb-converter-panel" class="hidden" style="margin-top: 40px;">
+
+        <h2 class="page-title" style="font-size: 24px;">
+            IPYNB to Python Converter
+        </h2>
+
+        <p class="page-subtitle" style="margin-bottom: 20px;">
+            Aşağıdaki alana bir <strong>.ipynb</strong> dosyasını sürükleyip bırakın veya tıklayıp seçin.
+        </p>
+
+        <!-- DRAG & DROP ALANI -->
+        <div id="drop-area" style="
+            border: 2px dashed #d0d0d0;
+            padding: 35px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        ">
+            <input type="file" id="file-input" accept=".ipynb" style="display: none;" />
+            <p style="font-size: 17px; margin-bottom: 5px;">Drop your .ipynb file here</p>
+            <p style="font-size: 13px; color:#666;">or click to choose a file</p>
+        </div>
+
+    </section>
+
+    <footer class="footer" style="margin-top: 60px;">
+        tool-convert · Simple tools for developers.
+    </footer>
+
+</main>
+
+
+
+<!-- ★★★ JAVASCRIPT – DRAG & DROP + DÖNÜŞTÜRME ★★★ -->
+<script>
+    // Tool panel açma
+    const openBtn = document.getElementById("open-ipynb-tool");
+    const panel = document.getElementById("ipynb-converter-panel");
+
+    openBtn.addEventListener("click", () => {
+        panel.classList.remove("hidden");
+        panel.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Drag + Drop alanı
     const dropArea = document.getElementById("drop-area");
     const fileInput = document.getElementById("file-input");
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
+    // Tıklayınca dosya seç
+    dropArea.addEventListener("click", () => fileInput.click());
 
-    if (dropArea && fileInput) {
-        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
+    // Sürükle-bırak olayları
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName =>
+        dropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+    );
 
-        ["dragenter", "dragover"].forEach((eventName) => {
-            dropArea.addEventListener(
-                eventName,
-                () => dropArea.classList.add("is-dragover"),
-                false
-            );
-        });
+    dropArea.addEventListener("drop", (e) => {
+        const file = e.dataTransfer.files[0];
+        handleFile(file);
+    });
 
-        ["dragleave", "drop"].forEach((eventName) => {
-            dropArea.addEventListener(
-                eventName,
-                () => dropArea.classList.remove("is-dragover"),
-                false
-            );
-        });
+    fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        handleFile(file);
+    });
 
-        // Alanın içine tıklayınca normal dosya seçim penceresini aç
-        dropArea.addEventListener("click", () => {
-            fileInput.click();
-        });
-
-        // Seçilen dosya (click ile)
-        fileInput.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            handleFile(file);
-        });
-
-        // Sürükleyip bırakılan dosya
-        dropArea.addEventListener("drop", (e) => {
-            const file = e.dataTransfer.files[0];
-            handleFile(file);
-        });
-    }
-
+    // IPYNB → PY DÖNÜŞTÜRÜCÜ
     function handleFile(file) {
         if (!file) return;
 
-        if (!file.name.toLowerCase().endsWith(".ipynb")) {
+        if (!file.name.endsWith(".ipynb")) {
             alert("Lütfen .ipynb uzantılı bir dosya seçin.");
             return;
         }
 
         const reader = new FileReader();
-        reader.onload = function (event) {
+        reader.onload = function (e) {
             try {
-                const notebook = JSON.parse(event.target.result);
-                const cells = notebook.cells || [];
-                let pyCode = "";
+                const json = JSON.parse(e.target.result);
+                const cells = json.cells || [];
+                let py = "";
 
-                cells.forEach((cell) => {
+                cells.forEach(cell => {
                     if (cell.cell_type === "code") {
-                        // source genelde string listesi şeklinde gelir
-                        pyCode += cell.source.join("") + "\n\n";
+                        py += cell.source.join("") + "\n\n";
                     }
                 });
 
-                if (!pyCode.trim()) {
+                if (!py.trim()) {
                     alert("Notebook içinde kod hücresi bulunamadı.");
                     return;
                 }
 
-                const blob = new Blob([pyCode], {
-                    type: "text/x-python;charset=utf-8",
-                });
-
+                const blob = new Blob([py], { type: "text/x-python" });
                 const url = URL.createObjectURL(blob);
+
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = file.name.replace(/\.ipynb$/i, "") + ".py";
-                document.body.appendChild(a);
+                a.download = file.name.replace(".ipynb", ".py");
                 a.click();
-                document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+
             } catch (err) {
-                console.error(err);
-                alert(
-                    "Dosya okunurken bir hata oluştu. Geçerli bir .ipynb dosyası olduğundan emin olun."
-                );
+                alert("Hatalı .ipynb dosyası veya JSON formatı.");
             }
         };
 
         reader.readAsText(file);
     }
 </script>
-<body>
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="nav-inner">
-            <a href="index.html" class="nav-logo">
-                <div class="nav-logo-mark"></div>
-                <span class="nav-logo-text">tool-convert</span>
-            </a>
-            <nav class="nav-links">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="#tools" class="nav-link">Converters</a>
-                <a href="contact.html" class="nav-link">Contact</a>
-            </nav>
-        </div>
-    </header>
 
-    <!-- PAGE CONTENT -->
-<main class="page-main">
-    <!-- Hero / Üst bölüm -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">IPYNB to Python Converter</h1>
-            <p class="hero-subtitle">
-                Jupyter Notebook dosyalarınızı (.ipynb) saniyeler içinde saf Python dosyalarına (.py) dönüştürün.
-            </p>
-        </div>
-    </section>
-
-    <!-- Kartlar (Converter listesi) -->
-    <section class="tools-section">
-        <h2 class="section-title">Converters</h2>
-        <div class="tools-grid">
-            <!-- Çalışan ana converter kartı -->
-            <article class="tool-card">
-                <h3 class="tool-title">IPYNB to Python</h3>
-                <p class="tool-description">
-                    Jupyter Notebook içindeki tüm kod hücrelerini toplayıp tek bir .py dosyası olarak indir.
-                </p>
-                <button id="open-ipynb-tool" class="tool-button">
-                    Open tool
-                </button>
-            </article>
-
-            <!-- İleride eklenecek - 1 -->
-            <article class="tool-card tool-card-soon">
-                <h3 class="tool-title">PY to IPYNB</h3>
-                <p class="tool-description">
-                    <strong>Soon</strong> – Python dosyalarınızı tekrar .ipynb formatına dönüştürme aracı.
-                </p>
-                <button class="tool-button" disabled>
-                    Soon
-                </button>
-            </article>
-
-            <!-- İleride eklenecek - 2 -->
-            <article class="tool-card tool-card-soon">
-                <h3 class="tool-title">JSON Beautifier</h3>
-                <p class="tool-description">
-                    <strong>Soon</strong> – JSON verilerinizi otomatik biçimlendirme ve güzelleştirme aracı.
-                </p>
-                <button class="tool-button" disabled>
-                    Soon
-                </button>
-            </article>
-        </div>
-    </section>
-
-    <!-- IPYNB → PY Converter aracı (Open tool ile açılacak kısım) -->
-    <section id="ipynb-converter-panel" class="converter-panel hidden">
-        <div class="converter-panel-inner">
-            <h2 class="panel-title">IPYNB to Python Converter</h2>
-            <p class="panel-description">
-                Aşağıdaki alana bir <code>.ipynb</code> dosyasını
-                <strong>sürükleyip bırakabilir</strong> veya tıklayarak seçebilirsiniz.
-                Dönüştürme işlemi tamamen tarayıcınızda gerçekleşir.
-            </p>
-
-            <!-- Drag & Drop alanı -->
-            <div id="drop-area" class="drop-area">
-                <input
-                    type="file"
-                    id="file-input"
-                    accept=".ipynb"
-                    class="file-input"
-                />
-                <div class="drop-area-content">
-                    <p class="drop-title">Drop your .ipynb file here</p>
-                    <p class="drop-subtitle">or click to choose a file</p>
-                </div>
-            </div>
-
-            <p class="panel-note">
-                Dönüşüm tamamlandığında, <strong>.py</strong> dosyası otomatik
-                olarak indirilecektir.
-            </p>
-        </div>
-    </section>
-</main>
 </body>
 </html>
-
-
