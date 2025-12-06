@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Image Pixel Resizer | Tool-Convert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="page">
+    
+    <header class="navbar">
+        <div class="logo">
+            <div class="logo-badge">TC</div>
+            <div>
+                <div>tool-convert</div>
+                <div class="logo-text-small">Multi-Tool Center – Browser-Based Converters</div>
+            </div>
+        </div>
+        
+        <nav class="nav-links">
+            
+            <li><a class="nav-link" href="index.html">Home</a></li>
+            
+            <li class="nav-dropdown-item">
+                <a class="nav-link dropdown-trigger" href="#">Code Converter</a>
+                <div class="dropdown-menu code-menu">
+                    <a href="ipynb-to-py.html" class="dropdown-link">IPYNB to PY</a>
+                    <a href="#" class="dropdown-link coming-soon-link">PY to IPYNB (Soon)</a>
+                </div>
+            </li>
+            
+            <li class="nav-dropdown-item active-dropdown">
+                <a class="nav-link dropdown-trigger nav-link-primary" href="#">Image Resize</a>
+                <div class="dropdown-menu image-menu">
+                    <a href="image-resizer.html" class="dropdown-link active-link">Pixel Resizer</a>
+                    <a href="#" class="dropdown-link coming-soon-link">Image Compressor (Soon)</a>
+                </div>
+            </li>
+            
+            <li class="nav-dropdown-item">
+                <a class="nav-link dropdown-trigger" href="#">Convert PDF</a>
+                <div class="dropdown-menu pdf-menu">
+                    <a href="pdf-to-word.html" class="dropdown-link">PDF to Word</a>
+                    <a href="#" class="dropdown-link coming-soon-link">PDF to JPG (Soon)</a>
+                </div>
+            </li>
+
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
+        </nav>
+    </header>
+
+    <main id="image-resizer-tool">
+        <div class="layout">
+            
+            <section class="card">
+                <div class="crumb">
+                    <span class="crumb-dot"></span>
+                    Image Pixel Resizer
+                </div>
+                <h1>Image Resize Tool</h1>
+                <p class="subtitle">
+                    Upload an image and specify the new pixel dimensions. The process runs locally in your browser.
+                </p>
+                
+                <div class="pill-row">
+                    <div class="pill">Client-Side</div>
+                    <div class="pill pill-soft">Fast and Secure</div>
+                    <div class="pill pill-soft">JPG & PNG supported</div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 20px;">
+                    Settings & Actions
+                </h2>
+                <p class="section-subtitle">
+                    Adjust your resizing parameters and download the final image.
+                </p>
+
+                <div id="settings-panel" style="padding: 0; margin-bottom: 20px;">
+                    
+                    <h3 class="setting-title">Export Type</h3>
+                    <div class="radio-group">
+                        <label><input type="radio" name="exportType" value="image" checked> Image</label>
+                        <label><input type="radio" name="exportType" value="pdf" disabled onclick="showSoonAlert('PDF Export')"> PDF (Soon)</label>
+                    </div>
+
+                    <h3 class="setting-title">Resolution</h3>
+                    <div class="radio-group" id="resolution-group">
+                        <label><input type="radio" name="resolutionMode" value="original" checked> Original</label>
+                        <label><input type="radio" name="resolutionMode" value="resize"> Resize</label>
+                        <label><input type="radio" name="resolutionMode" value="crop_resize"> Crop &amp; Resize</label>
+                        <label><input type="radio" name="resolutionMode" value="crop_only" disabled> Crop Only (Soon)</label>
+                    </div>
+
+                    <div id="resize-inputs" class="hidden-inputs">
+                        <label for="new-width">Width (px):</label>
+                        <input type="number" id="new-width" value="250" min="1">
+                        <label for="new-height">Height (px):</label>
+                        <input type="number" id="new-height" value="250" min="1">
+                    </div>
+
+                    <h3 class="setting-title">File Size</h3>
+                    <div class="radio-group" id="file-size-group">
+                        <label><input type="radio" name="fileSizeMode" value="default" checked> Default (Max Quality)</label>
+                        <label><input type="radio" name="fileSizeMode" value="limit" disabled onclick="showSoonAlert('File Size Limit')"> Limit Size (Soon)</label>
+                    </div>
+
+                    <h3 class="setting-title">File Format</h3>
+                    <div class="radio-group" id="file-format-group">
+                        <label><input type="radio" name="fileFormat" value="image/jpeg" checked> JPG / JPEG</label>
+                        <label><input type="radio" name="fileFormat" value="image/png"> PNG</label>
+                    </div>
+                    
+                    <div class="hint-row" style="margin-top: 20px;">
+                        <span id="resizer-status">Upload an image to start configuration.</span>
+                    </div>
+
+                    <div id="drop-zone" class="drop-zone" style="text-align: center; margin-top: 20px;">
+                        <input type="file" id="image-file-input" accept="image/*" style="display: none;" /> 
+                        <button class="primary-btn" type="button" id="upload-start-btn">Choose Image</button> 
+                    </div>
+
+                    <button class="primary-btn" type="button" id="download-btn" disabled style="margin-top: 20px; width: 100%;">
+                        Download Resized Image
+                    </button>
+                </div>
+                
+                <canvas id="image-canvas" style="display:none;"></canvas>
+
+            </section>
+
+            <section class="card preview-card">
+                <div class="preview-header">
+                    <div class="preview-title">Live Preview</div>
+                    <div class="preview-subtitle">
+                        The resized image will appear here.
+                    </div>
+                </div>
+
+                <div id="preview-image-container" style="text-align: center; padding: 20px; flex: 1; border: 1px dashed var(--border-soft); border-radius: 12px; display: flex; align-items: center; justify-content: center; min-height: 200px;">
+                    <p id="preview-placeholder" style="color: var(--text-soft);">Image not loaded or ready.</p>
+                    <img id="preview-image" src="" alt="Resized Image Preview" style="max-width: 100%; max-height: 100%; display: none;">
+                </div>
+                
+                <div class="preview-box" style="background: #f8fafc; color: var(--text-main); margin-top: 20px;">
+                    <div class="preview-scroll" id="resizer-log" style="white-space: normal; color: var(--text-soft); font-size: 0.85rem;">
+                         * Image processing logs will appear here.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        tool-convert.com · Simple in-browser converters
+    </footer>
+</div>
+
+<script src="js/resizer.js"></script> 
+
+</body>
+</html>

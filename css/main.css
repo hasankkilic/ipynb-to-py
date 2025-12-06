@@ -1,0 +1,247 @@
+/* css/main.css */
+:root {
+    /* Genel Renk Değişkenleri */
+    --bg: #f4f5fb; /* Arkaplan rengi */
+    --card-bg: #ffffff; /* Kartların arkaplan rengi */
+    --accent: #2563eb; /* Ana vurgu rengi (Mavi) */
+    --accent-soft: rgba(37, 99, 235, 0.08); /* Yumuşak vurgu rengi */
+    --accent-border: rgba(37, 99, 235, 0.35); /* Vurgu kenarlığı */
+    --text-main: #111827; /* Ana metin rengi */
+    --text-soft: #6b7280; /* Yumuşak metin rengi */
+    --border-soft: #e5e7eb; /* Yumuşak kenarlık rengi */
+    --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08); /* Kart gölgesi */
+    --radius-lg: 18px; /* Büyük köşe yuvarlatma */
+    --radius-xl: 24px; /* Çok büyük köşe yuvarlatma */
+}
+
+/* Tüm elementler için kutu modelini (box-sizing) ayarla */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    /* Font ailesini ayarla */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased; /* Fontları yumuşatma */
+    font-size: 18px;
+}
+
+/* Link stilini sıfırla */
+a { color: inherit; text-decoration: none; }
+
+/* Ana sayfa içeriği için maksimum genişlik ve ortalama */
+.page { max-width: 1120px; margin: 0 auto; padding: 28px 18px 56px; }
+
+/* NAVBAR (Navigasyon Çubuğu) Stilleri */
+.navbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; padding: 12px 18px; border-radius: 16px;
+    /* Hafif eğimli gradyan ve beyaz arkaplan */
+    background: linear-gradient(120deg, rgba(15, 23, 42, 0.03) 0%, rgba(15, 23, 42, 0.0) 45%, rgba(15, 23, 42, 0.04) 100%), #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10); /* Hafif gölge */
+}
+
+/* Logo Stilleri */
+.logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1.1rem; }
+.logo-badge {
+    /* TC logosu rozeti */
+    width: 32px; height: 32px; border-radius: 999px;
+    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; color: #ffffff;
+}
+.logo-text-small { font-size: 0.85rem; color: var(--text-soft); font-weight: 400; }
+
+/* Navigasyon Linkleri */
+.nav-links { display: flex; align-items: center; gap: 20px; font-size: 0.98rem; }
+.nav-link { padding: 6px 10px; border-radius: 999px; color: var(--text-soft); transition: background 0.18s ease, color 0.18s ease; }
+.nav-link:hover { background: rgba(148, 163, 184, 0.12); color: var(--text-main); }
+/* Aktif sayfa link stili */
+.nav-link-primary { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 6px 14px; font-weight: 550; }
+
+/* LAYOUT (Genel Düzen) */
+.layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 22px; } /* İki sütunlu düzen */
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } } /* Küçük ekranlarda tek sütuna düşür */
+
+/* Kart Stilleri (Genel) */
+.card { background: var(--card-bg); border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); padding: 22px 22px 20px; }
+
+/* YÜKLEYİCİ & ÖNİZLEME (UPLOADER & PREVIEW) Stilleri */
+.crumb {
+    /* Küçük yol gösterici/etiket */
+    display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px;
+    border-radius: 999px; font-size: 0.78rem; color: var(--accent);
+    background: var(--accent-soft); border: 1px solid var(--accent-border); margin-bottom: 12px;
+}
+.crumb-dot { width: 6px; height: 6px; border-radius: 999px; background: #34d399; } /* Yeşil nokta */
+
+h1 { margin: 0 0 8px; font-size: 1.9rem; letter-spacing: -0.01em; }
+.subtitle { margin: 0 0 18px; font-size: 0.98rem; color: var(--text-soft); max-width: 40rem; }
+
+/* Etiket (Pill) Satırları */
+.pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.pill { font-size: 0.78rem; padding: 5px 10px; border-radius: 999px; background: #f3f4ff; color: #4b5563; }
+.pill-soft { background: #f3f4f6; }
+
+/* Dosya Bırakma Alanı (Drop Zone) */
+.drop-zone {
+    border-radius: var(--radius-lg); border: 1px dashed #cbd5f5; background: #f8fafc;
+    padding: 32px 22px; text-align: center; cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+.drop-zone.drag-over { border-color: var(--accent); background: #eef2ff; box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15); }
+.drop-title { font-weight: 600; margin-bottom: 6px; }
+.drop-subtitle { font-size: 0.88rem; color: var(--text-soft); margin-bottom: 18px; }
+
+/* Ana Buton Stilleri */
+.primary-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border-radius: 999px; border: none; padding: 9px 20px;
+    background: var(--accent); color: #ffffff; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35); transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+.primary-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(37, 99, 235, 0.4); background: #1d4ed8; }
+.primary-btn:active { transform: translateY(0); box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35); }
+.primary-btn small { font-size: 0.8rem; opacity: 0.9; }
+
+.hint-row { margin-top: 12px; font-size: 0.8rem; color: var(--text-soft); }
+.hint-row strong { color: #111827; }
+
+/* Önizleme Kartı (Sağ taraftaki) */
+.preview-card { display: flex; flex-direction: column; height: 100%; }
+.preview-header { margin-bottom: 10px; }
+.preview-title { font-size: 0.98rem; font-weight: 600; }
+.preview-subtitle { font-size: 0.82rem; color: var(--text-soft); }
+
+.preview-box {
+    /* Kod/Log kutusu */
+    background: #020617; border-radius: 16px; padding: 12px 0 10px; color: #e5e7eb;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.78rem;
+    overflow: hidden; flex: 1; display: flex; flex-direction: column;
+}
+/* İçerik kaydırma alanı (Özellikle kod önizlemesi için) */
+.preview-scroll { max-height: 420px; min-height: 420px; overflow-y: auto; overflow-x: auto; white-space: pre; padding: 10px 14px 14px; }
+.preview-meta { border-top: 1px solid rgba(148, 163, 184, 0.25); padding: 7px 14px 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #9ca3af; }
+.download-link { color: #a5b4fc; font-weight: 500; text-decoration: none; }
+.download-link:hover { text-decoration: underline; }
+
+/* ARAÇ KARTLARI (TOOL CARDS) Stilleri (index.html'de kullanılır) */
+.tools-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.tool-card {
+    /* Kartların genişliğini ayarla */
+    flex: 1 1 260px; background: #f9fafb; border-radius: 16px; border: 1px solid #e5e7eb;
+    padding: 14px 14px 13px; display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 0.2s; /* Hover efekti için */
+}
+/* Kart hover efekti */
+.tool-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15); cursor: pointer; }
+
+.tool-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.tool-name { font-size: 0.96rem; font-weight: 600; }
+/* Aktif ve Yakında Rozetleri */
+.tool-badge-active { font-size: 0.78rem; padding: 3px 8px; border-radius: 999px; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.tool-badge-soon { font-size: 0.78rem; padding: 3px 8px; border-radius: 999px; background: #fef9c3; color: #92400e; border: 1px solid #facc15; }
+.tool-desc { font-size: 0.82rem; color: var(--text-soft); margin: 0 0 10px; }
+.tool-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--text-soft); }
+.tool-open-btn { border-radius: 999px; border: none; padding: 6px 13px; background: #111827; color: #f9fafb; font-size: 0.8rem; font-weight: 500; cursor: pointer; }
+.tool-open-btn[disabled] { opacity: 0.5; cursor: default; }
+
+/* Genel Bölüm Başlıkları ve Ayırıcılar */
+section { margin-top: 40px; }
+.section-title { font-size: 1.3rem; margin-bottom: 6px; }
+.section-subtitle { font-size: 0.92rem; color: var(--text-soft); }
+.footer { margin-top: 38px; font-size: 0.8rem; text-align: center; color: var(--text-soft); }
+
+/* --- YENİ EKLENECEK CSS STİLLERİ: AÇILIR MENÜ (DROPDOWN) --- */
+
+/* Dropdown menüyü barındıran li elementi */
+.nav-links li { 
+    /* Li elementlerini yan yana tutmak için */
+    display: inline-block; 
+    /* Açılır menüleri doğru konumlandırmak için */
+    position: relative; 
+}
+
+/* Tüm açılır menülerin varsayılan stili */
+.dropdown-menu {
+    display: none; /* Varsayılan olarak gizle */
+    position: absolute;
+    top: 100%; /* Navigasyon linkinin hemen altına yerleştir */
+    left: 0;
+    min-width: 200px;
+    background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    z-index: 100; /* Diğer elementlerin üstünde görünmesini sağla */
+    padding: 10px 0;
+    margin-top: 5px; /* Nav bar ile arasında hafif boşluk bırak */
+    white-space: nowrap; /* Menüdeki linklerin yan yana gelmesini engelle */
+    flex-direction: column; /* İçindeki linkleri alt alta sırala */
+}
+
+/* Menüdeki her bir link */
+.dropdown-link {
+    padding: 8px 15px;
+    font-size: 0.95rem;
+    color: var(--text-main) !important;
+    transition: background-color 0.2s ease;
+}
+
+/* Linkin üzerine gelindiğinde arkaplan rengi */
+.dropdown-link:hover {
+    background-color: var(--accent-soft);
+    color: var(--accent) !important;
+}
+
+/* Yakında (Coming Soon) linkleri */
+.coming-soon-link {
+    opacity: 0.6;
+    pointer-events: none; /* Tıklamayı engelle */
+}
+
+/* Dropdown'ı görünür yapma kuralı (Hover ile tetiklenir) */
+.nav-dropdown-item:hover .dropdown-menu {
+    display: flex;
+}
+/* --- YENİ EKLENECEK CSS STİLLERİ: AYARLAR PANELİ VE SEKMELER --- */
+
+
+
+/* Radyo buton grupları */
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.radio-group label {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+    accent-color: var(--accent); /* Radyo rengini vurgu rengi yapar */
+}
+
+/* Gizli inputlar (Genişlik/Yükseklik) için stil */
+/* Not: Display: none ve display: flex geçişi JS tarafından kontrol edilecektir. */
+.hidden-inputs {
+    margin-top: 15px;
+    padding: 10px 0;
+    /* Varsayılan olarak gizli. JS, "Resize" seçilince bunu flex yapacaktır. */
+    display: none; 
+    align-items: center;
+    gap: 10px;
+}
+.hidden-inputs input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+}
+.hidden-inputs label {
+    font-weight: 500;
+}
